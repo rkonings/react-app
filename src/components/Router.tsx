@@ -5,13 +5,20 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 
+const SecureRoutes = [
+	<Route path="/" exact={true} component={Dashboard} />,
+	<Route path="/clients" exact={true} component={Clients} />
+];
+
+const Routes = [
+	<Route path="/login" exact={true} component={Login} />
+];
+
 export default () => {
 	return (
 		<Router>
 			<Switch>
-				<Route path="/" exact={true} component={Dashboard} />
-				<Route path="/clients" exact={true} component={Clients} />
-				<Route path="/login" exact={true} component={Login} />
+				{localStorage.getItem('token') ? SecureRoutes : Routes}
 				<Route component={NotFound} />
 			</Switch>
 		</Router>
