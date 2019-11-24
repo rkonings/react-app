@@ -6,10 +6,10 @@ export default () => {
 	return (
 		<React.Fragment>
 			<Basic
-				pageTitle="Clients management"
-				left={<Navigation />}
+				left={<Navigation/>}
+				pageTitle="Inbox"
 			>
-				<div>Data</div>
+				<div>Inbox</div>
 			</Basic>
 		</React.Fragment>
 	);
