@@ -8,6 +8,7 @@ import Inbox from './pages/Inbox';
 import Agenda from './pages/Agenda';
 import ProjectManagement from './pages/ProjectManagement';
 import Invoice from './pages/Invoice';
+import TimeManagement from './pages/TimeManagement';
 
 const SecureRoutes = [
 	<Route path="/" exact={true} component={Dashboard} />,
@@ -15,6 +16,7 @@ const SecureRoutes = [
 	<Route path="/inbox" exact={true} component={Inbox} />,
 	<Route path="/agenda" exact={true} component={Agenda} />,
 	<Route path="/project-management" exact={true} component={ProjectManagement} />,
+	<Route path="/time-management" exact={true} component={TimeManagement} />,
 	<Route path="/invoice" exact={true} component={Invoice} />
 ];
 
