@@ -4,10 +4,12 @@ import Clients from './pages/Ciients';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
+import Inbox from './pages/Inbox';
 
 const SecureRoutes = [
 	<Route path="/" exact={true} component={Dashboard} />,
-	<Route path="/clients" exact={true} component={Clients} />
+	<Route path="/clients" exact={true} component={Clients} />,
+	<Route path="/inbox" exact={true} component={Inbox} />
 ];
 
 const Routes = [
