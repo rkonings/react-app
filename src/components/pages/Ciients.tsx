@@ -5,8 +5,11 @@ import Basic from 'react-ui/build/Layout/Basic';
 export default () => {
 	return (
 		<React.Fragment>
-			<Basic left={<Navigation />}>
-				<h1>Clients</h1>
+			<Basic
+				pageTitle="Clients management"
+				left={<Navigation />}
+			>
+				<div>Data</div>
 			</Basic>
 		</React.Fragment>
 	);
