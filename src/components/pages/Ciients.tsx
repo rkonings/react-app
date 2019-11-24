@@ -4,7 +4,7 @@ import Basic from 'react-ui/build/Layout/Basic';
 import { DataField, DataRow } from 'react-ui/build/interfaces/Data';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
-import { DataTable } from 'react-ui/build/DataTable/';
+import { ResponsiveDataTable } from 'react-ui/build/DataTable/';
 
 const fields: DataField[] = [
 	{
@@ -88,9 +88,7 @@ export default () => {
 				pageTitle="Clients management"
 				left={<Navigation />}
 			>
-				<DataTable
-					height={400}
-					width={800}
+				<ResponsiveDataTable
 					columns={columns}
 					data={clients}
 					fields={fields}
