@@ -5,11 +5,13 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 import Inbox from './pages/Inbox';
+import Agenda from './pages/Agenda';
 
 const SecureRoutes = [
 	<Route path="/" exact={true} component={Dashboard} />,
 	<Route path="/clients" exact={true} component={Clients} />,
-	<Route path="/inbox" exact={true} component={Inbox} />
+	<Route path="/inbox" exact={true} component={Inbox} />,
+	<Route path="/agenda" exact={true} component={Agenda} />
 ];
 
 const Routes = [
