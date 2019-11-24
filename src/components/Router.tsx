@@ -6,12 +6,14 @@ import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 import Inbox from './pages/Inbox';
 import Agenda from './pages/Agenda';
+import ProjectManagement from './pages/ProjectManagement';
 
 const SecureRoutes = [
 	<Route path="/" exact={true} component={Dashboard} />,
 	<Route path="/clients" exact={true} component={Clients} />,
 	<Route path="/inbox" exact={true} component={Inbox} />,
-	<Route path="/agenda" exact={true} component={Agenda} />
+	<Route path="/agenda" exact={true} component={Agenda} />,
+	<Route path="/project-management" exact={true} component={ProjectManagement} />
 ];
 
 const Routes = [
