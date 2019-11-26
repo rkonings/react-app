@@ -137,7 +137,6 @@ export default () => {
 
 	if (data) {
 		clients = data.clients;
-		console.log(data.clients[0]);
 	}
 
 	return (
