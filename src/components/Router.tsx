@@ -12,7 +12,8 @@ import TimeManagement from './pages/TimeManagement';
 
 const SecureRoutes = [
 	<Route path="/" exact={true} component={Dashboard} />,
-	<Route path="/clients" exact={true} component={Clients} />,
+	<Route path="/clients/:filter/" component={Clients} />,
+	<Route path="/clients" component={Clients} />,
 	<Route path="/inbox" exact={true} component={Inbox} />,
 	<Route path="/agenda" exact={true} component={Agenda} />,
 	<Route path="/project-management" exact={true} component={ProjectManagement} />,
