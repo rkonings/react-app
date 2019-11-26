@@ -67,7 +67,28 @@ const columns = [
 	},
 	{
 		type: 'DATA',
+		fieldName: 'type',
+		width: 150,
+		align: 'left',
+		sortable: true
+	},
+	{
+		type: 'DATA',
 		fieldName: 'address',
+		width: 300,
+		align: 'left',
+		sortable: true,
+	},
+	{
+		type: 'DATA',
+		fieldName: 'zipcode',
+		width: 300,
+		align: 'left',
+		sortable: true,
+	},
+	{
+		type: 'DATA',
+		fieldName: 'city',
 		width: 300,
 		align: 'left',
 		sortable: true,
