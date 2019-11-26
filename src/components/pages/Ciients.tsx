@@ -1,12 +1,52 @@
 import React from 'react';
 import Navigation from '../Navigation';
 import queryString from 'query-string';
-import { useParams } from 'react-router';
+import { useParams, useHistory } from 'react-router';
 import Basic from 'react-ui/build/Layout/Basic';
 import { DataField, DataRow } from 'react-ui/build/interfaces/Data';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import { ResponsiveDataTable } from 'react-ui/build/DataTable/';
+import { FilterBar } from 'react-ui/build/Filters';
+import { Filter } from 'react-ui/build/Filters/FilterBar';
+
+const ClientTypes = [
+	'Klant',
+	'Prospect',
+	'Lead',
+	'Suspect'
+];
+
+const Cities = [
+	'Utrecht',
+	'Nieuwegein',
+	'Eindhoven',
+	'Ijsselstein',
+	'Amsterdam',
+	'Hellendoorn',
+	'Hilversum',
+	'Breda',
+	'Bilthoven',
+	'Amersfoort'
+];
+
+const FilterConfig: Filter[] = [
+	{
+		id: 'type',
+		label: 'Type',
+		options: ClientTypes.map((item) => {
+			return { value: item, label: item };
+		})
+	},
+	{
+		id: 'city',
+		label: 'City',
+		options: Cities.map((item) => {
+			return { value: item, label: item };
+		}),
+		search: true
+	}
+];
 
 const fields: DataField[] = [
 	{
@@ -104,10 +144,10 @@ const columns = [
 ];
 
 const useFilter = () => {
-	const {filter = null} = useParams();
+	const { filter } = useParams();
 
 	if (filter) {
-		return queryString.parse(filter, {arrayFormat: 'comma'});
+		return queryString.parse(filter, { arrayFormat: 'comma' }) as { [key: string]: string[]};
 	}
 
 	return null;
@@ -115,6 +155,13 @@ const useFilter = () => {
 };
 
 export default () => {
+
+	const history = useHistory();
+
+	const setFilter = (filter: { [key: string]: string[]}) => {
+		const query = queryString.stringify(filter, {arrayFormat: 'comma'});
+		history.push('/clients/' + query + '/');
+	};
 
 	const GET_CLIENTS = gql`
         query GET_CLIENTS($type: [String], $city: [String]) {
@@ -131,6 +178,13 @@ export default () => {
         }
     `;
 	const filter = useFilter();
+
+	FilterConfig.forEach((item) => {
+		if (filter && Array.isArray(filter[item.id])){
+			item.value = filter[item.id];
+		}
+	});
+
 	const { loading, error, data } = useQuery(GET_CLIENTS, { variables: filter });
 
 	let clients: DataRow[] = [];
@@ -145,6 +199,7 @@ export default () => {
 				pageTitle="Clients management"
 				left={<Navigation />}
 			>
+				<FilterBar data={FilterConfig} onChange={setFilter} />
 				<ResponsiveDataTable
 					columns={columns}
 					data={clients}
