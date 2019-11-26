@@ -117,18 +117,21 @@ const useFilter = () => {
 export default () => {
 
 	const GET_CLIENTS = gql`
-        query {
-            clients {
+        query GET_CLIENTS($type: [String], $city: [String]) {
+            clients (type: $type, city: $city) {
 				data {
                 	name
 					telephone
 					address
+					city
+					zipcode
+					type
 				}
             }
         }
     `;
-
-	const { loading, error, data } = useQuery(GET_CLIENTS);
+	const filter = useFilter();
+	const { loading, error, data } = useQuery(GET_CLIENTS, { variables: filter });
 
 	let clients: DataRow[] = [];
 
