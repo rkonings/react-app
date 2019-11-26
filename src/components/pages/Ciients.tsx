@@ -1,5 +1,7 @@
 import React from 'react';
 import Navigation from '../Navigation';
+import queryString from 'query-string';
+import { useParams } from 'react-router';
 import Basic from 'react-ui/build/Layout/Basic';
 import { DataField, DataRow } from 'react-ui/build/interfaces/Data';
 import { useQuery } from '@apollo/react-hooks';
@@ -58,6 +60,17 @@ const columns = [
 	}
 
 ];
+
+const useFilter = () => {
+	const {filter = null} = useParams();
+
+	if (filter) {
+		return queryString.parse(filter, {arrayFormat: 'comma'});
+	}
+
+	return null;
+
+};
 
 export default () => {
 
