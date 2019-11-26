@@ -18,6 +18,13 @@ const fields: DataField[] = [
 	},
 	{
 		type: 'string',
+		name: 'type',
+		hasNegative: false,
+		isDateTime: false,
+		display: 'Type'
+	},
+	{
+		type: 'string',
 		name: 'telephone',
 		hasNegative: false,
 		isDateTime: false,
@@ -29,6 +36,20 @@ const fields: DataField[] = [
 		hasNegative: false,
 		isDateTime: true,
 		display: 'Address'
+	},
+	{
+		type: 'string',
+		name: 'zipcode',
+		hasNegative: false,
+		isDateTime: true,
+		display: 'Zipcode'
+	},
+	{
+		type: 'string',
+		name: 'city',
+		hasNegative: false,
+		isDateTime: true,
+		display: 'City'
 	}
 ];
 
