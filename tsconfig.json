@@ -29,6 +29,7 @@
 		"module": "es6",
 		"removeComments": true,
 		"alwaysStrict": true,
+		"sourceMap": true,
 		"allowUnreachableCode": false,
 		"noImplicitAny": true,
 		"noImplicitThis": true,
