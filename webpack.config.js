@@ -4,6 +4,7 @@ module.exports = {
 
   // webpack will take the files from ./src/index
   entry: './src/index',
+  
 
   // and output it into /dist as bundle.js
   output: {
@@ -20,6 +21,7 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
   },
+  devtool: 'source-map',
 
   module: {
     rules: [
@@ -31,6 +33,11 @@ module.exports = {
         use: {
           loader: 'babel-loader'
         },
+      },
+      {
+        test: /\.js$/,
+        use: ["source-map-loader"],
+        enforce: "pre"
       }
 
       // // css-loader to bundle all the css files into one file and style-loader to add all the styles  inside the style tag of the document
