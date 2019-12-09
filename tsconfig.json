@@ -1,5 +1,10 @@
 {
 	"compilerOptions": {
+		"plugins": [
+			{
+			  "name": "typescript-tslint-plugin"
+			}
+		  ],
 		// Target latest version of ECMAScript.
 		"target": "esnext",
 		// path to output directory
