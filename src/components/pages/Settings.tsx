@@ -32,7 +32,21 @@ import {
 
 const Settings = () => {
     const { loading, error, data } = useUser();
-    const [updateUser] = useUpdateUser();
+    const [updateUser, { data: updatedData }] = useUpdateUser();
+
+    const [user, setUser] = React.useState<User>();
+
+    React.useEffect(() => {
+        if (data && data.user) {
+            setUser(data.user);
+        }
+    }, [data]);
+
+    React.useEffect(() => {
+        if (updatedData && updatedData.updateUser) {
+            setUser(updatedData.updateUser);
+        }
+    }, [updatedData]);
 
     const onChange = (
         items: ChangedItem[],
@@ -47,41 +61,37 @@ const Settings = () => {
         }
     };
 
-    if (loading) {
-        return <div />;
-    }
-
-    const { user } = data;
-
     return (
         <React.Fragment>
             <Basic pageTitle="Settings" left={<Navigation />}>
-                <Tab active="profile">
-                    <TabContent id="profile" label="Profile">
-                        <BasicInfo
-                            user={user}
-                            validationSchema={ValidationSchema}
-                            errors={new Map()}
-                            onChange={onChange}
-                        />
-                    </TabContent>
-                    <TabContent id="companies" label="Companies">
-                        <Companies
-                            user={user}
-                            validationSchema={ValidationSchema}
-                            errors={new Map()}
-                            onChange={onChange}
-                        />
-                    </TabContent>
-                    <TabContent id="privacy" label="Privacy">
-                        <Privacy
-                            user={user}
-                            validationSchema={ValidationSchema}
-                            errors={new Map()}
-                            onChange={onChange}
-                        />
-                    </TabContent>
-                </Tab>
+                {user && (
+                    <Tab active="profile">
+                        <TabContent id="profile" label="Profile">
+                            <BasicInfo
+                                user={user}
+                                validationSchema={ValidationSchema}
+                                errors={new Map()}
+                                onChange={onChange}
+                            />
+                        </TabContent>
+                        <TabContent id="companies" label="Companies">
+                            <Companies
+                                user={user}
+                                validationSchema={ValidationSchema}
+                                errors={new Map()}
+                                onChange={onChange}
+                            />
+                        </TabContent>
+                        <TabContent id="privacy" label="Privacy">
+                            <Privacy
+                                user={user}
+                                validationSchema={ValidationSchema}
+                                errors={new Map()}
+                                onChange={onChange}
+                            />
+                        </TabContent>
+                    </Tab>
+                )}
             </Basic>
         </React.Fragment>
     );
