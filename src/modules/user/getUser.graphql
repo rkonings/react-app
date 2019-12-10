@@ -1,0 +1,14 @@
+query {
+    user {
+        email
+        firstName
+        lastName
+        settings {
+            language
+            dateFormat
+            pushNotifications
+            unscribeEmailLink
+            signature
+        }
+    }
+}

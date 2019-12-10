@@ -1,0 +1,14 @@
+mutation update($user: InputUser) {
+    updateUser(user: $user) {
+        email
+        firstName
+        lastName
+        settings {
+            language
+            dateFormat
+            pushNotifications
+            unscribeEmailLink
+            signature
+        }
+    }
+}
