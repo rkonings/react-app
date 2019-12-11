@@ -2,6 +2,7 @@ import React from 'react';
 import dotProp from 'dot-prop';
 import Basic from 'react-ui/build/Layout/Basic';
 import Navigation from '../Navigation';
+import getUser from '../../modules/user/getUser.graphql';
 
 import { ChangedItem, ChangeOptions } from 'react-ui/build/Form';
 import BasicInfo from '../../components/Settings/BasicInfo';
@@ -15,6 +16,9 @@ import {
     useUpdateUser,
     User,
 } from '../../modules/user';
+import { Button } from 'react-ui/build/Button';
+
+import { useApolloClient } from '@apollo/react-hooks';
 
 // const user = {
 //     firstName: 'Randy',
@@ -31,8 +35,16 @@ import {
 // };
 
 const Settings = () => {
-    const { loading, error, data } = useUser();
-    const [updateUser, { data: updatedData }] = useUpdateUser();
+    const { data } = useUser({
+        fetchPolicy: 'cache-only',
+    });
+    const [updateUser] = useUpdateUser({
+        onCompleted: data => {
+            if (data && data.updateUser) {
+                setUser(data.updateUser);
+            }
+        },
+    });
 
     const [user, setUser] = React.useState<User>();
 
@@ -41,12 +53,6 @@ const Settings = () => {
             setUser(data.user);
         }
     }, [data]);
-
-    React.useEffect(() => {
-        if (updatedData && updatedData.updateUser) {
-            setUser(updatedData.updateUser);
-        }
-    }, [updatedData]);
 
     const onChange = (
         items: ChangedItem[],
