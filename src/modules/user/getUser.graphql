@@ -1,5 +1,6 @@
 query {
     user {
+        _id
         email
         firstName
         lastName
