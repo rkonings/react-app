@@ -1,6 +1,3 @@
-// npm link react-ui
-// cd ../../react-ui/react-ui && npm link ../../react-app/react-app/node_modules/react && npm link ../../react-app/react-app/node_modules/react-dom
-
 import React from 'react';
 import defaultTheme from 'react-ui/build/themes/default';
 import ThemeProvider from 'react-ui/build/themes/Provider';
