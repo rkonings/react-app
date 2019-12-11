@@ -10,6 +10,7 @@ export default () => {
 	return (
 		<Navigation>
 			<NavigationItem onClick={() => history.push('/')} icon={<Home />}>Dashboard</NavigationItem>
+			<NavigationItem onClick={() => history.push('/settings')} icon={<Home />}>Settings</NavigationItem>
 			<NavigationItem onClick={() => history.push('/inbox')} icon={<Inbox />}>Inbox</NavigationItem>
 			<NavigationItem onClick={() => history.push('/clients')} icon={<Clients />}>Clients</NavigationItem>
 			<NavigationItem onClick={() => history.push('/agenda')} isActive={true} icon={<Agenda />}>Agenda</NavigationItem>
