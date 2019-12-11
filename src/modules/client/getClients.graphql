@@ -1,0 +1,12 @@
+query GET_CLIENTS($type: [String], $city: [String]) {
+    clients(type: $type, city: $city) {
+        data {
+            name
+            telephone
+            address
+            city
+            zipcode
+            type
+        }
+    }
+}
