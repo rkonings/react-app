@@ -5,20 +5,21 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from './ApolloClient';
 import Router from './Router';
 import GlobalStyle from 'react-ui/build/GlobalStyle';
+import { DataLoader } from '../modules/dataLoader';
 
-class App extends React.PureComponent {
-    render() {
-        return (
-            <ApolloProvider client={ApolloClient}>
-                <ThemeProvider theme={defaultTheme}>
-                    <React.Fragment>
-                        <GlobalStyle />
+const App = () => {
+    return (
+        <ApolloProvider client={ApolloClient}>
+            <ThemeProvider theme={defaultTheme}>
+                <React.Fragment>
+                    <GlobalStyle />
+                    <DataLoader>
                         <Router />
-                    </React.Fragment>
-                </ThemeProvider>
-            </ApolloProvider>
-        );
-    }
-}
+                    </DataLoader>
+                </React.Fragment>
+            </ThemeProvider>
+        </ApolloProvider>
+    );
+};
 
 export default App;
