@@ -3,209 +3,228 @@ import Navigation from '../Navigation';
 import queryString from 'query-string';
 import { useParams, useHistory } from 'react-router';
 import Basic from 'react-ui/build/Layout/Basic';
-import { DataField, DataRow } from 'react-ui/build/interfaces/Data';
-import { useQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
 import { ResponsiveDataTable } from 'react-ui/build/DataTable/';
 import { FilterBar } from 'react-ui/build/Filters';
 import { Filter } from 'react-ui/build/Filters/FilterBar';
+import { useGetClients, Client } from '../../modules/client';
+import { AddClient } from '../../modules/client/components/addClient';
+import { UpdateClient } from '../../modules/client/components/updateClient';
+import { DataField, DataRow } from 'react-ui/build/interfaces/Data';
+import { Edit, Options, Trash } from 'react-ui/build/Icon';
+import RowAction from 'react-ui/build/DataTable/DataTableRowAction';
+import ButtonGroup from 'react-ui/build/ButtonGroup/ButtonGroup';
 
-const ClientTypes = [
-	'Klant',
-	'Prospect',
-	'Lead',
-	'Suspect'
-];
+const ClientTypes = ['Klant', 'Prospect', 'Lead', 'Suspect'];
 
 const Cities = [
-	'Utrecht',
-	'Nieuwegein',
-	'Eindhoven',
-	'Ijsselstein',
-	'Amsterdam',
-	'Hellendoorn',
-	'Hilversum',
-	'Breda',
-	'Bilthoven',
-	'Amersfoort'
+    'Utrecht',
+    'Nieuwegein',
+    'Eindhoven',
+    'Ijsselstein',
+    'Amsterdam',
+    'Hellendoorn',
+    'Hilversum',
+    'Breda',
+    'Bilthoven',
+    'Amersfoort',
 ];
 
 const FilterConfig: Filter[] = [
-	{
-		id: 'type',
-		label: 'Type',
-		options: ClientTypes.map((item) => {
-			return { value: item, label: item };
-		})
-	},
-	{
-		id: 'city',
-		label: 'City',
-		options: Cities.map((item) => {
-			return { value: item, label: item };
-		}),
-		search: true
-	}
+    {
+        id: 'type',
+        label: 'Type',
+        options: ClientTypes.map(item => {
+            return { value: item, label: item };
+        }),
+    },
+    {
+        id: 'city',
+        label: 'City',
+        options: Cities.map(item => {
+            return { value: item, label: item };
+        }),
+        search: true,
+    },
 ];
 
 const fields: DataField[] = [
-	{
-		type: 'string',
-		name: 'name',
-		hasNegative: false,
-		isDateTime: false,
-		display: 'Company'
-	},
-	{
-		type: 'string',
-		name: 'type',
-		hasNegative: false,
-		isDateTime: false,
-		display: 'Type'
-	},
-	{
-		type: 'string',
-		name: 'telephone',
-		hasNegative: false,
-		isDateTime: false,
-		display: 'Telephone'
-	},
-	{
-		type: 'string',
-		name: 'address',
-		hasNegative: false,
-		isDateTime: true,
-		display: 'Address'
-	},
-	{
-		type: 'string',
-		name: 'zipcode',
-		hasNegative: false,
-		isDateTime: true,
-		display: 'Zipcode'
-	},
-	{
-		type: 'string',
-		name: 'city',
-		hasNegative: false,
-		isDateTime: true,
-		display: 'City'
-	}
-];
-
-const columns = [
-	{
-		type: 'SELECT',
-		width: 50
-	},
-	{
-		type: 'DATA',
-		fieldName: 'name',
-		sortable: true,
-		defaultSort: true,
-		defaultSortDirection: 'ASC'
-	},
-	{
-		type: 'DATA',
-		fieldName: 'type',
-		width: 150,
-		align: 'left',
-		sortable: true
-	},
-	{
-		type: 'DATA',
-		fieldName: 'address',
-		width: 300,
-		align: 'left',
-		sortable: true,
-	},
-	{
-		type: 'DATA',
-		fieldName: 'zipcode',
-		width: 300,
-		align: 'left',
-		sortable: true,
-	},
-	{
-		type: 'DATA',
-		fieldName: 'city',
-		width: 300,
-		align: 'left',
-		sortable: true,
-	},
-	{
-		type: 'DATA',
-		fieldName: 'telephone',
-		width: 200,
-		align: 'right',
-		sortable: true
-	}
-
+    {
+        type: 'string',
+        name: 'name',
+        hasNegative: false,
+        isDateTime: false,
+        display: 'Company',
+    },
+    {
+        type: 'string',
+        name: 'type',
+        hasNegative: false,
+        isDateTime: false,
+        display: 'Type',
+    },
+    {
+        type: 'string',
+        name: 'telephone',
+        hasNegative: false,
+        isDateTime: false,
+        display: 'Telephone',
+    },
+    {
+        type: 'string',
+        name: 'address',
+        hasNegative: false,
+        isDateTime: true,
+        display: 'Address',
+    },
+    {
+        type: 'string',
+        name: 'zipcode',
+        hasNegative: false,
+        isDateTime: true,
+        display: 'Zipcode',
+    },
+    {
+        type: 'string',
+        name: 'city',
+        hasNegative: false,
+        isDateTime: true,
+        display: 'City',
+    },
 ];
 
 const useFilter = () => {
-	const { filter } = useParams();
+    const { filter } = useParams();
 
-	if (filter) {
-		return queryString.parse(filter, { arrayFormat: 'comma' }) as { [key: string]: string[]};
-	}
+    if (filter) {
+        return queryString.parse(filter, { arrayFormat: 'comma' }) as {
+            [key: string]: string[];
+        };
+    }
 
-	return null;
-
+    return null;
 };
 
 export default () => {
+    const history = useHistory();
 
-	const history = useHistory();
+    const [editClientId, setEditClientId] = React.useState<string | null>(null);
 
-	const setFilter = (filter: { [key: string]: string[]}) => {
-		const query = queryString.stringify(filter, {arrayFormat: 'comma'});
-		history.push('/clients/' + query + '/');
-	};
+    const columns = [
+        {
+            type: 'SELECT',
+            width: 50,
+        },
+        {
+            type: 'DATA',
+            fieldName: 'name',
+            sortable: true,
+            defaultSort: true,
+            defaultSortDirection: 'ASC',
+        },
+        {
+            type: 'DATA',
+            fieldName: 'type',
+            width: 150,
+            align: 'left',
+            sortable: true,
+        },
+        {
+            type: 'DATA',
+            fieldName: 'address',
+            width: 300,
+            align: 'left',
+            sortable: true,
+        },
+        {
+            type: 'DATA',
+            fieldName: 'zipcode',
+            width: 100,
+            align: 'left',
+            sortable: true,
+        },
+        {
+            type: 'DATA',
+            fieldName: 'city',
+            width: 200,
+            align: 'left',
+            sortable: true,
+        },
+        {
+            type: 'DATA',
+            fieldName: 'telephone',
+            width: 100,
+            align: 'right',
+            sortable: true,
+        },
+        {
+            type: 'TOOLBAR',
+            width: 110,
+            toolbar: (row: DataRow) => (
+                <ButtonGroup size={'s'}>
+                    <RowAction onClick={() => setEditClientId(row.data._id)}>
+                        <Edit />
+                    </RowAction>
+                    <RowAction onClick={() => console.log('Delete', row)}>
+                        <Trash />
+                    </RowAction>
+                    <RowAction>
+                        <Options />
+                    </RowAction>
+                </ButtonGroup>
+            ),
+        },
+    ];
 
-	const GET_CLIENTS = gql`
-        query GET_CLIENTS($type: [String], $city: [String]) {
-            clients (type: $type, city: $city) {
-				data {
-                	name
-					telephone
-					address
-					city
-					zipcode
-					type
-				}
-            }
+    const setFilter = (filter: { [key: string]: string[] }) => {
+        const query = queryString.stringify(filter, { arrayFormat: 'comma' });
+        history.push('/clients/' + query + '/');
+    };
+
+    const filter = useFilter();
+
+    FilterConfig.forEach(item => {
+        if (filter && Array.isArray(filter[item.id])) {
+            item.value = filter[item.id];
         }
-    `;
-	const filter = useFilter();
+    });
 
-	FilterConfig.forEach((item) => {
-		if (filter && Array.isArray(filter[item.id])){
-			item.value = filter[item.id];
-		}
-	});
+    const { loading, error, data } = useGetClients(filter);
 
-	const { loading, error, data } = useQuery(GET_CLIENTS, { variables: filter });
+    let clients: DataRow[] = [];
 
-	let clients: DataRow[] = [];
+    if (data) {
+        clients = data.clients.map((client: Client) => {
+            return { data: client };
+        });
+    }
 
-	if (data) {
-		clients = data.clients;
-	}
-
-	return (
-		<React.Fragment>
-			<Basic
-				pageTitle="Clients management"
-				left={<Navigation />}
-			>
-				<FilterBar data={FilterConfig} onChange={setFilter} />
-				<ResponsiveDataTable
-					columns={columns}
-					data={clients}
-					fields={fields}
-				/>
-			</Basic>
-		</React.Fragment>
-	);
+    return (
+        <React.Fragment>
+            <Basic pageTitle="Clients management" left={<Navigation />}>
+                <React.Fragment>
+                    {loading && clients.length === 0 && <h1>Loading</h1>}
+                    {clients && (
+                        <React.Fragment>
+                            <AddClient />
+                            <FilterBar
+                                data={FilterConfig}
+                                onChange={setFilter}
+                            />
+                            <ResponsiveDataTable
+                                columns={columns}
+                                data={clients}
+                                fields={fields}
+                            />
+                        </React.Fragment>
+                    )}
+                </React.Fragment>
+            </Basic>
+            {editClientId && (
+                <UpdateClient
+                    close={() => setEditClientId(null)}
+                    _id={editClientId}
+                />
+            )}
+        </React.Fragment>
+    );
 };

@@ -1,0 +1,11 @@
+mutation update($client: ClientInput) {
+    updateClient(client: $client) {
+        _id
+        name
+        telephone
+        address
+        city
+        zipcode
+        type
+    }
+}
