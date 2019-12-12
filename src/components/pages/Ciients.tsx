@@ -6,7 +6,13 @@ import Basic from 'react-ui/build/Layout/Basic';
 import { ResponsiveDataTable } from 'react-ui/build/DataTable/';
 import { FilterBar } from 'react-ui/build/Filters';
 import { Filter } from 'react-ui/build/Filters/FilterBar';
-import { useGetClients } from '../../modules/client';
+import { useGetClients, Client } from '../../modules/client';
+import { AddClient } from '../../modules/client/components/addClient';
+import { UpdateClient } from '../../modules/client/components/updateClient';
+import { DataField, DataRow } from 'react-ui/build/interfaces/Data';
+import { Edit, Options, Trash } from 'react-ui/build/Icon';
+import RowAction from 'react-ui/build/DataTable/DataTableRowAction';
+import ButtonGroup from 'react-ui/build/ButtonGroup/ButtonGroup';
 
 const ClientTypes = ['Klant', 'Prospect', 'Lead', 'Suspect'];
 
@@ -86,55 +92,6 @@ const fields: DataField[] = [
     },
 ];
 
-const columns = [
-    {
-        type: 'SELECT',
-        width: 50,
-    },
-    {
-        type: 'DATA',
-        fieldName: 'name',
-        sortable: true,
-        defaultSort: true,
-        defaultSortDirection: 'ASC',
-    },
-    {
-        type: 'DATA',
-        fieldName: 'type',
-        width: 150,
-        align: 'left',
-        sortable: true,
-    },
-    {
-        type: 'DATA',
-        fieldName: 'address',
-        width: 300,
-        align: 'left',
-        sortable: true,
-    },
-    {
-        type: 'DATA',
-        fieldName: 'zipcode',
-        width: 300,
-        align: 'left',
-        sortable: true,
-    },
-    {
-        type: 'DATA',
-        fieldName: 'city',
-        width: 300,
-        align: 'left',
-        sortable: true,
-    },
-    {
-        type: 'DATA',
-        fieldName: 'telephone',
-        width: 200,
-        align: 'right',
-        sortable: true,
-    },
-];
-
 const useFilter = () => {
     const { filter } = useParams();
 
@@ -149,6 +106,74 @@ const useFilter = () => {
 
 export default () => {
     const history = useHistory();
+
+    const [editClientId, setEditClientId] = React.useState<string | null>(null);
+
+    const columns = [
+        {
+            type: 'SELECT',
+            width: 50,
+        },
+        {
+            type: 'DATA',
+            fieldName: 'name',
+            sortable: true,
+            defaultSort: true,
+            defaultSortDirection: 'ASC',
+        },
+        {
+            type: 'DATA',
+            fieldName: 'type',
+            width: 150,
+            align: 'left',
+            sortable: true,
+        },
+        {
+            type: 'DATA',
+            fieldName: 'address',
+            width: 300,
+            align: 'left',
+            sortable: true,
+        },
+        {
+            type: 'DATA',
+            fieldName: 'zipcode',
+            width: 100,
+            align: 'left',
+            sortable: true,
+        },
+        {
+            type: 'DATA',
+            fieldName: 'city',
+            width: 200,
+            align: 'left',
+            sortable: true,
+        },
+        {
+            type: 'DATA',
+            fieldName: 'telephone',
+            width: 100,
+            align: 'right',
+            sortable: true,
+        },
+        {
+            type: 'TOOLBAR',
+            width: 110,
+            toolbar: (row: DataRow) => (
+                <ButtonGroup size={'s'}>
+                    <RowAction onClick={() => setEditClientId(row.data._id)}>
+                        <Edit />
+                    </RowAction>
+                    <RowAction onClick={() => console.log('Delete', row)}>
+                        <Trash />
+                    </RowAction>
+                    <RowAction>
+                        <Options />
+                    </RowAction>
+                </ButtonGroup>
+            ),
+        },
+    ];
 
     const setFilter = (filter: { [key: string]: string[] }) => {
         const query = queryString.stringify(filter, { arrayFormat: 'comma' });
@@ -168,19 +193,38 @@ export default () => {
     let clients: DataRow[] = [];
 
     if (data) {
-        clients = data.clients;
+        clients = data.clients.map((client: Client) => {
+            return { data: client };
+        });
     }
 
     return (
         <React.Fragment>
             <Basic pageTitle="Clients management" left={<Navigation />}>
-                <FilterBar data={FilterConfig} onChange={setFilter} />
-                <ResponsiveDataTable
-                    columns={columns}
-                    data={clients}
-                    fields={fields}
-                />
+                <React.Fragment>
+                    {loading && clients.length === 0 && <h1>Loading</h1>}
+                    {clients && (
+                        <React.Fragment>
+                            <AddClient />
+                            <FilterBar
+                                data={FilterConfig}
+                                onChange={setFilter}
+                            />
+                            <ResponsiveDataTable
+                                columns={columns}
+                                data={clients}
+                                fields={fields}
+                            />
+                        </React.Fragment>
+                    )}
+                </React.Fragment>
             </Basic>
+            {editClientId && (
+                <UpdateClient
+                    close={() => setEditClientId(null)}
+                    _id={editClientId}
+                />
+            )}
         </React.Fragment>
     );
 };

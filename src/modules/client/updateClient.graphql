@@ -1,5 +1,5 @@
-query GET_CLIENTS($type: [String], $city: [String]) {
-    clients(type: $type, city: $city) {
+mutation update($client: ClientInput) {
+    updateClient(client: $client) {
         _id
         name
         telephone
