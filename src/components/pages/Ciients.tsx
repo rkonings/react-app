@@ -6,6 +6,7 @@ import Basic from 'react-ui/build/Layout/Basic';
 import { ResponsiveDataTable } from 'react-ui/build/DataTable/';
 import { FilterBar } from 'react-ui/build/Filters';
 import { Filter } from 'react-ui/build/Filters/FilterBar';
+import FilterPopup from 'react-ui/build/Filters/FilterPopup';
 import { useGetClients, Client } from '../../modules/client';
 import { AddClient } from '../../modules/client/components/addClient';
 import { UpdateClient } from '../../modules/client/components/updateClient';
@@ -188,7 +189,6 @@ export default () => {
         }
     });
 
-    const { loading, error, data } = useGetClients(filter);
     const { loading, error, data, refetch } = useGetClients(filter);
 
     let clients: DataRow[] = [];
@@ -206,8 +206,8 @@ export default () => {
                     {loading && clients.length === 0 && <h1>Loading</h1>}
                     {clients && (
                         <React.Fragment>
-                            <FilterBar
                             <AddClient onAdded={() => refetch()} />
+                            <FilterPopup
                                 data={FilterConfig}
                                 onChange={setFilter}
                             />
