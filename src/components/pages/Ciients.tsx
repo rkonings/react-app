@@ -189,6 +189,7 @@ export default () => {
     });
 
     const { loading, error, data } = useGetClients(filter);
+    const { loading, error, data, refetch } = useGetClients(filter);
 
     let clients: DataRow[] = [];
 
@@ -205,8 +206,8 @@ export default () => {
                     {loading && clients.length === 0 && <h1>Loading</h1>}
                     {clients && (
                         <React.Fragment>
-                            <AddClient />
                             <FilterBar
+                            <AddClient onAdded={() => refetch()} />
                                 data={FilterConfig}
                                 onChange={setFilter}
                             />
