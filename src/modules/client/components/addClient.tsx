@@ -13,9 +13,11 @@ import { ValidationSchema, Client, useAddClient } from '../';
 import { InputField, ChangedItem, ChangeOptions } from 'react-ui/build/Form';
 import TextField from 'react-ui/build/Input/TextField/TextField';
 
-interface AddClient {}
+interface AddClient {
+    onAdded?: () => void;
+}
 
-export const AddClient = ({}: AddClient) => {
+export const AddClient = ({ onAdded }: AddClient) => {
     const [addClient] = useAddClient({});
 
     const onChangeHandler = (
@@ -33,6 +35,9 @@ export const AddClient = ({}: AddClient) => {
             update: () => {
                 if (callBack) {
                     callBack();
+                }
+                if (onAdded) {
+                    onAdded();
                 }
             },
         });
