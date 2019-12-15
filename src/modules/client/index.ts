@@ -40,7 +40,7 @@ export const useAddClient = (
 };
 
 export interface Client {
-    _id: string;
+    _id?: string;
     name: string;
     telephone: string;
     address: string;
