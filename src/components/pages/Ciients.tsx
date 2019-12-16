@@ -29,7 +29,7 @@ const Cities = [
     'Amersfoort',
 ];
 
-const FilterConfig: FilterConfig[] = [
+const filterConfig: FilterConfig[] = [
     {
         id: 'type',
         label: 'Type',
@@ -182,7 +182,7 @@ export default () => {
 
     const filter = useFilter();
 
-    FilterConfig.forEach(item => {
+    filterConfig.forEach(item => {
         if (filter && Array.isArray(filter[item.id])) {
             item.value = filter[item.id];
         }
@@ -207,7 +207,7 @@ export default () => {
                         <React.Fragment>
                             <AddClient onAdded={() => refetch()} />
                             <FilterPopup
-                                data={FilterConfig}
+                                data={filterConfig}
                                 onChange={setFilter}
                             />
                             <ResponsiveDataTable
