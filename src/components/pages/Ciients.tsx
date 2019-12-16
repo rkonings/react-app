@@ -1,11 +1,7 @@
 import React from 'react';
 import Navigation from '../Navigation';
-import queryString from 'query-string';
-import { useParams, useHistory } from 'react-router';
 import Basic from 'react-ui/build/Layout/Basic';
 import { ResponsiveDataTable } from 'react-ui/build/DataTable/';
-import { FilterConfig } from 'react-ui/build/Filters/Filter';
-import FilterPopup from 'react-ui/build/Filters/FilterPopup';
 import { useGetClients, Client } from '../../modules/client';
 import { AddClient } from '../../modules/client/components/addClient';
 import { UpdateClient } from '../../modules/client/components/updateClient';
@@ -14,38 +10,10 @@ import { Edit, Options, Trash } from 'react-ui/build/Icon';
 import RowAction from 'react-ui/build/DataTable/DataTableRowAction';
 import ButtonGroup from 'react-ui/build/ButtonGroup/ButtonGroup';
 
-const ClientTypes = ['Klant', 'Prospect', 'Lead', 'Suspect'];
-
-const Cities = [
-    'Utrecht',
-    'Nieuwegein',
-    'Eindhoven',
-    'Ijsselstein',
-    'Amsterdam',
-    'Hellendoorn',
-    'Hilversum',
-    'Breda',
-    'Bilthoven',
-    'Amersfoort',
-];
-
-const filterConfig: FilterConfig[] = [
-    {
-        id: 'type',
-        label: 'Type',
-        options: ClientTypes.map(item => {
-            return { value: item, label: item };
-        }),
-    },
-    {
-        id: 'city',
-        label: 'City',
-        options: Cities.map(item => {
-            return { value: item, label: item };
-        }),
-        search: true,
-    },
-];
+import {
+    ClientFilter,
+    useQueryFilter,
+} from '../../modules/client/components/clientFilter';
 
 const fields: DataField[] = [
     {
@@ -92,21 +60,7 @@ const fields: DataField[] = [
     },
 ];
 
-const useFilter = () => {
-    const { filter } = useParams();
-
-    if (filter) {
-        return queryString.parse(filter, { arrayFormat: 'comma' }) as {
-            [key: string]: string[];
-        };
-    }
-
-    return null;
-};
-
 export default () => {
-    const history = useHistory();
-
     const [editClientId, setEditClientId] = React.useState<string | null>(null);
 
     const columns = [
@@ -174,20 +128,7 @@ export default () => {
             ),
         },
     ];
-
-    const setFilter = (filter: { [key: string]: string[] }) => {
-        const query = queryString.stringify(filter, { arrayFormat: 'comma' });
-        history.push('/clients/' + query + '/');
-    };
-
-    const filter = useFilter();
-
-    filterConfig.forEach(item => {
-        if (filter && Array.isArray(filter[item.id])) {
-            item.value = filter[item.id];
-        }
-    });
-
+    const filter = useQueryFilter();
     const { loading, data, refetch } = useGetClients(filter);
 
     let clients: DataRow[] = [];
@@ -206,10 +147,7 @@ export default () => {
                     {clients && (
                         <React.Fragment>
                             <AddClient onAdded={() => refetch()} />
-                            <FilterPopup
-                                data={filterConfig}
-                                onChange={setFilter}
-                            />
+                            <ClientFilter />
                             <ResponsiveDataTable
                                 columns={columns}
                                 data={clients}
