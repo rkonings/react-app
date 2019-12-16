@@ -19,7 +19,7 @@ export const useQueryFilter = () => {
 
 export const ClientFilter = () => {
     const history = useHistory();
-    const { loading, data } = useGetFilters(['city', 'type']);
+    const { data } = useGetFilters(['city', 'type']);
     const filter = useQueryFilter();
 
     const setFilter = (filter: { [key: string]: string[] }) => {
