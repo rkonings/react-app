@@ -129,7 +129,7 @@ export default () => {
         },
     ];
     const filter = useQueryFilter();
-    const { loading, data, refetch } = useGetClients(filter);
+    const { loading, data } = useGetClients(filter);
 
     let clients: DataRow[] = [];
 
@@ -146,7 +146,7 @@ export default () => {
                     {loading && clients.length === 0 && <h1>Loading</h1>}
                     {clients && (
                         <React.Fragment>
-                            <AddClient onAdded={() => refetch()} />
+                            <AddClient />
                             <ClientFilter />
                             <ResponsiveDataTable
                                 columns={columns}

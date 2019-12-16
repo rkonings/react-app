@@ -44,7 +44,10 @@ export const useGetFilters = (types: string[], options?: QueryHookOptions) => {
 export const useAddClient = (
     options?: MutationHookOptions<any, Record<string, any>>
 ) => {
-    return useMutation(ADD_CLIENT_QUERY, options);
+    return useMutation(ADD_CLIENT_QUERY, {
+        refetchQueries: ['GET_CLIENTS'],
+        ...options,
+    });
 };
 
 export interface Client {
