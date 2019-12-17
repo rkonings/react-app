@@ -5,16 +5,29 @@ import queryString from 'query-string';
 import { useParams, useHistory } from 'react-router';
 import { useGetFilters } from '../';
 
-export const useQueryFilter = () => {
+export const useQueryFilter = (): { [key: string]: string[] } => {
     const { filter } = useParams();
 
     if (filter) {
-        return queryString.parse(filter, { arrayFormat: 'comma' }) as {
-            [key: string]: string[];
-        };
+        const parsedFilter = queryString.parse(filter, {
+            arrayFormat: 'comma',
+        });
+
+        return Object.keys(parsedFilter).reduce<{ [name: string]: string[] }>(
+            (obj, key) => {
+                let value = parsedFilter[key];
+                if (value instanceof Array) {
+                    obj[key] = value;
+                } else if (typeof value === 'string') {
+                    obj[key] = [value];
+                }
+                return obj;
+            },
+            {}
+        );
     }
 
-    return null;
+    return {};
 };
 
 export const ClientFilter = () => {
@@ -28,7 +41,7 @@ export const ClientFilter = () => {
     };
     if (data && data.filter) {
         data.filter.forEach((item: FilterConfig) => {
-            if (filter && Array.isArray(filter[item.id])) {
+            if (filter[item.id]) {
                 item.value = filter[item.id];
             }
         });
