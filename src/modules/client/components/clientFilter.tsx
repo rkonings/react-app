@@ -41,7 +41,7 @@ export const ClientFilter = () => {
     };
     if (data && data.filter) {
         data.filter.forEach((item: FilterConfig) => {
-            if (filter && Array.isArray(filter[item.id])) {
+            if (filter[item.id]) {
                 item.value = filter[item.id];
             }
         });
