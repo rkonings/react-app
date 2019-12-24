@@ -1,7 +1,7 @@
 import { Yup } from 'react-ui/build/Validation';
 
 export default Yup.object({
-    _id: Yup.string(),
+    _id: Yup.string().notRequired(),
     name: Yup.string().min(1, 'company name is required'),
     telephone: Yup.string().matches(
         /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
