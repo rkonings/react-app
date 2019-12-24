@@ -7,5 +7,11 @@ query GET_CLIENT($_id: String) {
         city
         zipcode
         type
+        activities {
+            notes
+            title
+            type
+            creationDate
+        }
     }
 }
