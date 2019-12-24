@@ -1,10 +1,17 @@
 query GET_CLIENT($_id: String) {
     client(_id: $_id) {
+        _id
         name
         telephone
         address
         city
         zipcode
         type
+        activities {
+            notes
+            title
+            type
+            creationDate
+        }
     }
 }

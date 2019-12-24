@@ -43,7 +43,7 @@ export const AddClient = ({ onAdded }: AddClient) => {
         });
     };
     return (
-        <PopupInput<Client>
+        <PopupInput<Omit<Client, '_id'>>
             link={<Button type="primary">Add client</Button>}
             onChange={onChangeHandler}
             width="400px"
