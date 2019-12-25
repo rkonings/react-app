@@ -1,0 +1,10 @@
+mutation ADD_ACTIVITY($activity: ActivityInput) {
+    addActivity(activity: $activity) {
+        _id
+        title
+        notes
+        creationDate
+        type
+        client
+    }
+}
