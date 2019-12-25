@@ -1,0 +1,10 @@
+mutation UPDATE_ACTIVITY($activity: ActivityInput) {
+    updateActivity(activity: $activity) {
+        _id
+        title
+        notes
+        type
+        creationDate
+        client
+    }
+}
