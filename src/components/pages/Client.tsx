@@ -8,6 +8,7 @@ import { useGetClient, useUpdateClient } from '../../modules/client';
 import Activity, {
     Activity as ActivityData,
 } from 'react-ui/build/Activity/Activity';
+import { AddActivity } from '../../modules/Activity/components/addActivity';
 
 const getActivitiesByType = (activities: ActivityData[], type?: string) => {
     if (!type) {
@@ -31,6 +32,7 @@ export default () => {
         (data && data.client && data.client.activities) || [];
     return (
         <Detail pageTitle={pageTitle} left={<Navigation />} details={detail}>
+            {data && data.client && <AddActivity clientId={data.client._id} />}
             <Tab type="minimal" active={activeTabId}>
                 <TabContent id="all" label="Activities">
                     {getActivitiesByType(activities).map(activity => (
