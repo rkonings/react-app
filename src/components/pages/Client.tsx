@@ -7,8 +7,9 @@ import { useParams } from 'react-router';
 import { useGetClient } from '../../modules/client';
 import UpdateActivity from '../../modules/activity/components/updateActivity';
 import { AddActivity } from '../../modules/activity/components/addActivity';
+import { Activity } from 'react-ui/build/Activity/Activity';
 
-const getActivitiesByType = (activities: ActivityData[], type?: string) => {
+const getActivitiesByType = (activities: Activity[], type?: string) => {
     if (!type) {
         return activities;
     }
@@ -26,7 +27,7 @@ export default () => {
 
     const activeTabId = 'all';
 
-    const activities: ActivityData[] =
+    const activities: Activity[] =
         (data && data.client && data.client.activities) || [];
     return (
         <Detail pageTitle={pageTitle} left={<Navigation />} details={detail}>
@@ -34,17 +35,26 @@ export default () => {
             <Tab type="minimal" active={activeTabId}>
                 <TabContent id="all" label="Activities">
                     {getActivitiesByType(activities).map(activity => (
-                        <UpdateActivity activity={activity} />
+                        <UpdateActivity
+                            key={activity._id}
+                            activity={activity}
+                        />
                     ))}
                 </TabContent>
                 <TabContent id="task" label="Tasks">
                     {getActivitiesByType(activities, 'task').map(activity => (
-                        <UpdateActivity activity={activity} />
+                        <UpdateActivity
+                            key={activity._id}
+                            activity={activity}
+                        />
                     ))}
                 </TabContent>
                 <TabContent id="call" label="Call">
                     {getActivitiesByType(activities, 'call').map(activity => (
-                        <UpdateActivity activity={activity} />
+                        <UpdateActivity
+                            key={activity._id}
+                            activity={activity}
+                        />
                     ))}
                 </TabContent>
             </Tab>
