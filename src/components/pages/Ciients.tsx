@@ -14,6 +14,7 @@ import {
     ClientFilter,
     useQueryFilter,
 } from '../../modules/client/components/clientFilter';
+import { useHistory } from 'react-router';
 
 const fields: DataField[] = [
     {
@@ -62,11 +63,31 @@ const fields: DataField[] = [
 
 export default () => {
     const [editClientId, setEditClientId] = React.useState<string | null>(null);
+    const history = useHistory();
 
     const columns = [
         {
             type: 'SELECT',
             width: 50,
+        },
+        {
+            type: 'TOOLBAR',
+            width: 110,
+            toolbar: (row: DataRow) => (
+                <ButtonGroup size={'s'}>
+                    <RowAction
+                        onClick={() => history.push(`/client/${row.data._id}/`)}
+                    >
+                        <Edit />
+                    </RowAction>
+                    <RowAction onClick={() => console.log('Delete', row)}>
+                        <Trash />
+                    </RowAction>
+                    <RowAction>
+                        <Options />
+                    </RowAction>
+                </ButtonGroup>
+            ),
         },
         {
             type: 'DATA',
@@ -109,23 +130,6 @@ export default () => {
             width: 100,
             align: 'right',
             sortable: true,
-        },
-        {
-            type: 'TOOLBAR',
-            width: 110,
-            toolbar: (row: DataRow) => (
-                <ButtonGroup size={'s'}>
-                    <RowAction onClick={() => setEditClientId(row.data._id)}>
-                        <Edit />
-                    </RowAction>
-                    <RowAction onClick={() => console.log('Delete', row)}>
-                        <Trash />
-                    </RowAction>
-                    <RowAction>
-                        <Options />
-                    </RowAction>
-                </ButtonGroup>
-            ),
         },
     ];
     const filter = useQueryFilter();
