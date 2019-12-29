@@ -148,18 +148,16 @@ export default () => {
         <React.Fragment>
             <Basic pageTitle="Clients management" left={<Navigation />}>
                 <React.Fragment>
-                    {loading && clients.length === 0 && <h1>Loading</h1>}
-                    {clients && (
-                        <React.Fragment>
-                            <AddClient />
-                            <ClientFilter />
-                            <ResponsiveDataTable
-                                columns={columns}
-                                data={clients}
-                                fields={fields}
-                            />
-                        </React.Fragment>
-                    )}
+                    <React.Fragment>
+                        <AddClient />
+                        <ClientFilter />
+                        <ResponsiveDataTable
+                            columns={columns}
+                            data={clients}
+                            fields={fields}
+                            loading={loading}
+                        />
+                    </React.Fragment>
                 </React.Fragment>
             </Basic>
             {editClientId && (
