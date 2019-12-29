@@ -51,9 +51,6 @@ const Routes = (
 
 export default () => {
     return (
-        <Router>
-            {localStorage.getItem('token') ? SecureRoutes : Routes}
-            <Route component={NotFound} />
-        </Router>
+        <Router>{localStorage.getItem('token') ? SecureRoutes : Routes}</Router>
     );
 };
