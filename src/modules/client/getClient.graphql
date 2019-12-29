@@ -8,6 +8,7 @@ query GET_CLIENT($_id: String) {
         zipcode
         type
         activities {
+            _id
             notes
             title
             type

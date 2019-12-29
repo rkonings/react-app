@@ -4,11 +4,9 @@ import { Detail } from 'react-ui/build/Layout';
 import Tab, { TabContent } from 'react-ui/build/Tab/Tab';
 import ClientDetails from '../../modules/client/components/clientDetails';
 import { useParams } from 'react-router';
-import { useGetClient, useUpdateClient } from '../../modules/client';
-import Activity, {
-    Activity as ActivityData,
-} from 'react-ui/build/Activity/Activity';
-import { AddActivity } from '../../modules/Activity/components/addActivity';
+import { useGetClient } from '../../modules/client';
+import UpdateActivity from '../../modules/activity/components/updateActivity';
+import { AddActivity } from '../../modules/activity/components/addActivity';
 
 const getActivitiesByType = (activities: ActivityData[], type?: string) => {
     if (!type) {
@@ -36,17 +34,17 @@ export default () => {
             <Tab type="minimal" active={activeTabId}>
                 <TabContent id="all" label="Activities">
                     {getActivitiesByType(activities).map(activity => (
-                        <Activity activity={activity} />
+                        <UpdateActivity activity={activity} />
                     ))}
                 </TabContent>
                 <TabContent id="task" label="Tasks">
                     {getActivitiesByType(activities, 'task').map(activity => (
-                        <Activity activity={activity} />
+                        <UpdateActivity activity={activity} />
                     ))}
                 </TabContent>
                 <TabContent id="call" label="Call">
                     {getActivitiesByType(activities, 'call').map(activity => (
-                        <Activity activity={activity} />
+                        <UpdateActivity activity={activity} />
                     ))}
                 </TabContent>
             </Tab>
