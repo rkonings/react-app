@@ -94,12 +94,13 @@ export default () => {
             fieldName: 'name',
             sortable: true,
             defaultSort: true,
+            width: 500,
             defaultSortDirection: 'ASC',
         },
         {
             type: 'DATA',
             fieldName: 'type',
-            width: 150,
+            width: 400,
             align: 'left',
             sortable: true,
         },
@@ -127,7 +128,7 @@ export default () => {
         {
             type: 'DATA',
             fieldName: 'telephone',
-            width: 100,
+            width: 300,
             align: 'right',
             sortable: true,
         },
