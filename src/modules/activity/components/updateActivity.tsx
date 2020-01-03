@@ -1,7 +1,7 @@
 import React from 'react';
 import dotProp from 'dot-prop';
 
-import Activity from 'react-ui/build/Activity/UpdateActivity';
+import Activity from 'react-ui/build/Activity/Activity';
 import { ChangedItem, ChangeOptions } from 'react-ui/build/Form';
 
 import { ValidationSchema, useUpdateActivity } from '../../activity';
