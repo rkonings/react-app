@@ -13,6 +13,7 @@ query GET_CLIENT($_id: String) {
             title
             type
             creationDate
+            dueDate
         }
     }
 }

@@ -6,5 +6,6 @@ mutation UPDATE_ACTIVITY($activity: ActivityInput) {
         type
         creationDate
         client
+        dueDate
     }
 }
