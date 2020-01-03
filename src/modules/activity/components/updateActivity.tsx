@@ -24,7 +24,7 @@ export default ({ activity }: Activity) => {
         }, {});
 
         updateValues({
-            variables: { activity: { ...update } },
+            variables: { activity: { _id: activity._id, ...update } },
             update: () => {
                 if (callBack) {
                     callBack();
