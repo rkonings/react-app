@@ -1,4 +1,4 @@
-mutation ADD_ACTIVITY($activity: ActivityInput) {
+mutation ADD_ACTIVITY($activity: CreateActivityInput) {
     addActivity(activity: $activity) {
         _id
         title
