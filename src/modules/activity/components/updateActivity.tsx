@@ -1,18 +1,22 @@
-import React from 'react';
 import dotProp from 'dot-prop';
+import React from 'react';
 
 import Activity from 'react-ui/build/Activity/Activity';
 import { ChangedItem, ChangeOptions } from 'react-ui/build/Form';
 
-import { ValidationSchema, useUpdateActivity } from '../../activity';
-import { Activity as ActivityInterface } from 'react-ui/build/Activity/Activity';
+import { ValidationSchema } from '../../activity';
+import {
+    Activity as ActivityInterface,
+    useUpdateActivityMutation,
+} from '../../hooks';
 
 interface Activity {
     activity: ActivityInterface;
 }
 
 export default ({ activity }: Activity) => {
-    const [updateValues] = useUpdateActivity();
+    const [updateActivity] = useUpdateActivityMutation();
+
     const onChangeHandler = (
         items: ChangedItem[],
         _?: ChangeOptions | undefined,
@@ -23,7 +27,7 @@ export default ({ activity }: Activity) => {
             return obj;
         }, {});
 
-        updateValues({
+        updateActivity({
             variables: { activity: { _id: activity._id, ...update } },
             update: () => {
                 if (callBack) {
