@@ -5,7 +5,10 @@ import Activity from 'react-ui/build/Activity/Activity';
 import { ChangedItem, ChangeOptions } from 'react-ui/build/Form';
 
 import { ValidationSchema, useUpdateActivity } from '../../activity';
-import { Activity as ActivityInterface } from 'react-ui/build/Activity/Activity';
+import {
+    useUpdateActivityMutation,
+    Activity as ActivityInterface,
+} from '../../hooks';
 
 interface Activity {
     activity: ActivityInterface;
@@ -13,6 +16,8 @@ interface Activity {
 
 export default ({ activity }: Activity) => {
     const [updateValues] = useUpdateActivity();
+    const [updateActivity] = useUpdateActivityMutation();
+
     const onChangeHandler = (
         items: ChangedItem[],
         _?: ChangeOptions | undefined,
@@ -23,7 +28,7 @@ export default ({ activity }: Activity) => {
             return obj;
         }, {});
 
-        updateValues({
+        updateActivity({
             variables: { activity: { _id: activity._id, ...update } },
             update: () => {
                 if (callBack) {
