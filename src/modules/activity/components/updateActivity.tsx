@@ -28,6 +28,7 @@ export default ({ activity }: Activity) => {
         }, {});
 
         updateActivity({
+            refetchQueries: ['GET_CLIENT'],
             variables: { activity: { _id: activity._id, ...update } },
             update: () => {
                 if (callBack) {

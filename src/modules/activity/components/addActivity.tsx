@@ -14,13 +14,16 @@ import { InputField, ChangedItem, ChangeOptions } from 'react-ui/build/Form';
 import TextField from 'react-ui/build/Input/TextField/TextField';
 import { Activity } from 'react-ui/build/Activity/Activity';
 
+import { useCreateActivityMutation, Client } from '../../hooks';
+import GET_CLIENT from '../../client/getClient.graphql';
+
 interface AddActivity {
     onAdded?: () => void;
     clientId: string;
 }
 
 export const AddActivity = ({ onAdded, clientId }: AddActivity) => {
-    const [addActivity] = useAddActivity();
+    const [createActivity] = useCreateActivityMutation();
 
     const onChangeHandler = (
         items: ChangedItem[],
@@ -34,8 +37,17 @@ export const AddActivity = ({ onAdded, clientId }: AddActivity) => {
 
         // console.log(items);
 
-        addActivity({
-            variables: { activity: { ...update, client: clientId } },
+        const activity = {
+            title: '',
+            type: 'call',
+            client: clientId,
+        };
+
+        createActivity({
+            variables: { activity: { ...activity, ...update } },
+            refetchQueries: [
+                { query: GET_CLIENT, variables: { _id: clientId } },
+            ],
             update: () => {
                 if (callBack) {
                     callBack();

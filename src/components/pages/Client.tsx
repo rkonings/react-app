@@ -1,13 +1,13 @@
 import React from 'react';
-import Navigation from '../Navigation';
+import { useParams } from 'react-router';
+import { Activity } from 'react-ui/build/Activity/Activity';
 import { Detail } from 'react-ui/build/Layout';
 import Tab, { TabContent } from 'react-ui/build/Tab/Tab';
-import ClientDetails from '../../modules/client/components/clientDetails';
-import { useParams } from 'react-router';
-import { useGetClient } from '../../modules/client';
-import UpdateActivity from '../../modules/activity/components/updateActivity';
 import { AddActivity } from '../../modules/activity/components/addActivity';
-import { Activity } from 'react-ui/build/Activity/Activity';
+import UpdateActivity from '../../modules/activity/components/updateActivity';
+import { useGetClient } from '../../modules/client';
+import ClientDetails from '../../modules/client/components/clientDetails';
+import Navigation from '../Navigation';
 
 const getActivitiesByType = (activities: Activity[], type?: string) => {
     if (!type) {
