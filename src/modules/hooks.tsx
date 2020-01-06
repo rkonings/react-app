@@ -42,8 +42,8 @@ export type Client = {
   telephone: Scalars['String'],
   city: Scalars['String'],
   user: Scalars['String'],
-  type?: Maybe<Scalars['String']>,
-  activities?: Maybe<Array<Maybe<Activity>>>,
+  type: Scalars['String'],
+  activities: Array<Activity>,
 };
 
 export type ClientInput = {
@@ -69,7 +69,7 @@ export type CreateActivityInput = {
 
 export type Filter = {
    __typename?: 'Filter',
-  options: Array<Maybe<FilterOption>>,
+  options: Array<FilterOption>,
   id: Scalars['String'],
   label: Scalars['String'],
 };
@@ -163,12 +163,12 @@ export type Query = {
   posts?: Maybe<Array<Maybe<Post>>>,
   authors?: Maybe<Array<Maybe<Author>>>,
   users?: Maybe<Array<Maybe<User>>>,
-  user?: Maybe<User>,
-  client?: Maybe<Client>,
-  clients?: Maybe<Array<Maybe<Client>>>,
-  activity?: Maybe<Activity>,
+  user: User,
+  client: Client,
+  clients: Array<Client>,
+  activity: Activity,
   activities?: Maybe<Array<Maybe<Activity>>>,
-  filter?: Maybe<Array<Maybe<Filter>>>,
+  filter: Array<Filter>,
 };
 
 
@@ -228,7 +228,7 @@ export type User = {
   password: Scalars['String'],
   firstName: Scalars['String'],
   lastName: Scalars['String'],
-  settings?: Maybe<Settings>,
+  settings: Settings,
 };
 
 export type ActivityFragment = (
@@ -267,19 +267,15 @@ export type ActivityQueryVariables = {};
 
 export type ActivityQuery = (
   { __typename?: 'Query' }
-  & { activity: Maybe<(
+  & { activity: (
     { __typename?: 'Activity' }
     & ActivityFragment
-  )> }
+  ) }
 );
 
 export type ClientFragment = (
   { __typename?: 'Client' }
   & Pick<Client, '_id' | 'name' | 'telephone' | 'address' | 'city' | 'zipcode' | 'type'>
-  & { activities: Maybe<Array<Maybe<(
-    { __typename?: 'Activity' }
-    & ActivityFragment
-  )>>> }
 );
 
 export type CreateClientMutationVariables = {
@@ -315,10 +311,14 @@ export type ClientQueryVariables = {
 
 export type ClientQuery = (
   { __typename?: 'Query' }
-  & { client: Maybe<(
+  & { client: (
     { __typename?: 'Client' }
+    & { activities: Array<(
+      { __typename?: 'Activity' }
+      & ActivityFragment
+    )> }
     & ClientFragment
-  )> }
+  ) }
 );
 
 export type ClientsQueryVariables = {
@@ -329,10 +329,10 @@ export type ClientsQueryVariables = {
 
 export type ClientsQuery = (
   { __typename?: 'Query' }
-  & { clients: Maybe<Array<Maybe<(
+  & { clients: Array<(
     { __typename?: 'Client' }
     & ClientFragment
-  )>>> }
+  )> }
 );
 
 export type FiltersQueryVariables = {
@@ -342,23 +342,23 @@ export type FiltersQueryVariables = {
 
 export type FiltersQuery = (
   { __typename?: 'Query' }
-  & { filter: Maybe<Array<Maybe<(
+  & { filter: Array<(
     { __typename?: 'Filter' }
     & Pick<Filter, 'id' | 'label'>
-    & { options: Array<Maybe<(
+    & { options: Array<(
       { __typename?: 'FilterOption' }
       & Pick<FilterOption, 'label' | 'value'>
-    )>> }
-  )>>> }
+    )> }
+  )> }
 );
 
 export type UserFragment = (
   { __typename?: 'User' }
   & Pick<User, '_id' | 'email' | 'firstName' | 'lastName'>
-  & { settings: Maybe<(
+  & { settings: (
     { __typename?: 'Settings' }
     & Pick<Settings, 'language' | 'dateFormat' | 'pushNotifications' | 'unscribeEmailLink' | 'signature'>
-  )> }
+  ) }
 );
 
 export type UpdateUserMutationVariables = {
@@ -379,10 +379,10 @@ export type UserQueryVariables = {};
 
 export type UserQuery = (
   { __typename?: 'Query' }
-  & { user: Maybe<(
+  & { user: (
     { __typename?: 'User' }
     & UserFragment
-  )> }
+  ) }
 );
 
 export const ActivityFragmentDoc = gql`
@@ -404,11 +404,8 @@ export const ClientFragmentDoc = gql`
   city
   zipcode
   type
-  activities {
-    ...Activity
-  }
 }
-    ${ActivityFragmentDoc}`;
+    `;
 export const UserFragmentDoc = gql`
     fragment User on User {
   _id
@@ -588,9 +585,13 @@ export const ClientDocument = gql`
     query client($_id: String) {
   client(_id: $_id) {
     ...Client
+    activities {
+      ...Activity
+    }
   }
 }
-    ${ClientFragmentDoc}`;
+    ${ClientFragmentDoc}
+${ActivityFragmentDoc}`;
 
 /**
  * __useClientQuery__
