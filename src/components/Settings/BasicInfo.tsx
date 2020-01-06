@@ -3,21 +3,21 @@ import React from 'react';
 import { Edit } from 'react-ui/build/Icon';
 
 import { OnChangeHandler } from 'react-ui/build/Form';
-import { ValidationErrors, Yup } from 'react-ui/build/Validation';
 import { Section, SettingsField } from 'react-ui/build/SettingsField';
+import { ValidationErrors, Yup } from 'react-ui/build/Validation';
 
 import ButtonGroup from 'react-ui/build/ButtonGroup/ButtonGroup';
 import { PopoverInput } from 'react-ui/build/CombinedInput/PopoverInput';
+import PopupInput from 'react-ui/build/CombinedInput/PopupInput';
+import Checkbox from 'react-ui/build/Input/Checkbox/Checkbox';
+import Select from 'react-ui/build/Input/Select/Select';
+import Switch from 'react-ui/build/Input/Switch/Switch';
+import TextField from 'react-ui/build/Input/TextField/TextField';
 import {
     PopupContent,
     PopupFooter,
     PopupHeader,
 } from 'react-ui/build/Popup/Popup';
-import PopupInput from 'react-ui/build/CombinedInput/PopupInput';
-import TextField from 'react-ui/build/Input/TextField/TextField';
-import Select from 'react-ui/build/Input/Select/Select';
-import Checkbox from 'react-ui/build/Input/Checkbox/Checkbox';
-import Switch from 'react-ui/build/Input/Switch/Switch';
 
 import { InputField } from 'react-ui/build/Form';
 
@@ -182,7 +182,6 @@ const BasicInfo = ({ user, onChange, errors, validationSchema }: BasicInfo) => {
                             }}
                         >
                             {({
-                                setOpen,
                                 errors,
                                 values,
                                 onChange,

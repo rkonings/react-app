@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { OnChangeHandler } from 'react-ui/build/Form';
-import { ValidationErrors, Yup } from 'react-ui/build/Validation';
 import { Section, SettingsField } from 'react-ui/build/SettingsField';
+import { ValidationErrors, Yup } from 'react-ui/build/Validation';
 
 import Checkbox from 'react-ui/build/Input/Checkbox/Checkbox';
 import Switch from 'react-ui/build/Input/Switch/Switch';

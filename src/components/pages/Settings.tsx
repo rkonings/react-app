@@ -1,40 +1,22 @@
-import React from 'react';
 import dotProp from 'dot-prop';
+import React from 'react';
 import Basic from 'react-ui/build/Layout/Basic';
 import Navigation from '../Navigation';
-import getUser from '../../modules/user/getUser.graphql';
 
 import { ChangedItem, ChangeOptions } from 'react-ui/build/Form';
+import Tab, { TabContent } from 'react-ui/build/Tab/Tab';
 import BasicInfo from '../../components/Settings/BasicInfo';
 import Companies from '../../components/Settings/Companies';
 import Privacy from '../../components/Settings/Privacy';
-import Tab, { TabContent } from 'react-ui/build/Tab/Tab';
 
 import {
-    useUpdateUserMutation,
-    useUserQuery,
     User,
     UserDocument,
+    useUpdateUserMutation,
+    useUserQuery,
 } from '../../modules/hooks';
 
-import { useUser, ValidationSchema, useUpdateUser } from '../../modules/user';
-import { Button } from 'react-ui/build/Button';
-
-import { useApolloClient } from '@apollo/react-hooks';
-
-// const user = {
-//     firstName: 'Randy',
-//     lastName: 'Konings',
-//     password: 'randykonings',
-//     email: 'randy@randykonings.nl',
-//     settings: {
-//         language: 'UK',
-//         dateFormat: 'UK',
-//         pushNotifications: true,
-//         unscribeEmailLink: true,
-//         signature: 'This is a faker signature. Really cool!',
-//     },
-// };
+import { ValidationSchema } from '../../modules/user';
 
 const Settings = () => {
     const { data } = useUserQuery({

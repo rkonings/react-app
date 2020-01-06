@@ -1,17 +1,17 @@
 import React from 'react';
 
 import { OnChangeHandler } from 'react-ui/build/Form';
-import { ValidationErrors, Yup } from 'react-ui/build/Validation';
 import { Section, SettingsField } from 'react-ui/build/SettingsField';
+import { ValidationErrors, Yup } from 'react-ui/build/Validation';
 
 import ButtonGroup from 'react-ui/build/ButtonGroup/ButtonGroup';
+import PopupInput from 'react-ui/build/CombinedInput/PopupInput';
+import TextField from 'react-ui/build/Input/TextField/TextField';
 import {
     PopupContent,
     PopupFooter,
     PopupHeader,
 } from 'react-ui/build/Popup/Popup';
-import PopupInput from 'react-ui/build/CombinedInput/PopupInput';
-import TextField from 'react-ui/build/Input/TextField/TextField';
 
 import { InputField } from 'react-ui/build/Form';
 
