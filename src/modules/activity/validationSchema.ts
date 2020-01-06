@@ -6,5 +6,7 @@ export default Yup.object({
     notes: Yup.string(),
     creationDate: Yup.date().required('Date is required'),
     type: Yup.string().required('type is required'),
-    dueDate: Yup.date().notRequired(),
+    dueDate: Yup.date()
+        .nullable()
+        .notRequired(),
 });
