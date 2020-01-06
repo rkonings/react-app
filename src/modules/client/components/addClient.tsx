@@ -9,7 +9,8 @@ import {
     PopupHeader,
 } from 'react-ui/build/Popup/Popup';
 import PopupInput from 'react-ui/build/CombinedInput/PopupInput';
-import { ValidationSchema, Client, useAddClient } from '../';
+import { ValidationSchema } from '../';
+import { Client, ClientsDocument, useCreateClientMutation } from '../../hooks';
 import { InputField, ChangedItem, ChangeOptions } from 'react-ui/build/Form';
 import TextField from 'react-ui/build/Input/TextField/TextField';
 
@@ -18,7 +19,7 @@ interface AddClient {
 }
 
 export const AddClient = ({ onAdded }: AddClient) => {
-    const [addClient] = useAddClient({});
+    const [addClient] = useCreateClientMutation({});
 
     const onChangeHandler = (
         items: ChangedItem[],
@@ -32,6 +33,7 @@ export const AddClient = ({ onAdded }: AddClient) => {
 
         addClient({
             variables: { client: update },
+            refetchQueries: [{ query: ClientsDocument }],
             update: () => {
                 if (callBack) {
                     callBack();
@@ -43,7 +45,7 @@ export const AddClient = ({ onAdded }: AddClient) => {
         });
     };
     return (
-        <PopupInput<Omit<Client, '_id'>>
+        <PopupInput<Omit<Client, '_id' | 'user'>>
             link={<Button type="primary">Add client</Button>}
             onChange={onChangeHandler}
             width="400px"
