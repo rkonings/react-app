@@ -1,15 +1,16 @@
 import React from 'react';
 import { useParams } from 'react-router';
-import { Activity } from 'react-ui/build/Activity/Activity';
 import { Detail } from 'react-ui/build/Layout';
 import Tab, { TabContent } from 'react-ui/build/Tab/Tab';
 import { AddActivity } from '../../modules/activity/components/addActivity';
 import UpdateActivity from '../../modules/activity/components/updateActivity';
-import { useGetClient } from '../../modules/client';
 import ClientDetails from '../../modules/client/components/clientDetails';
+import { Activity, useClientQuery } from '../../modules/hooks';
 import Navigation from '../Navigation';
 
-const getActivitiesByType = (activities: Activity[], type?: string) => {
+type Activities = Array<Omit<Activity, 'user' | 'client'>>;
+
+const getActivitiesByType = (activities: Activities, type?: string) => {
     if (!type) {
         return activities;
     }
@@ -19,45 +20,56 @@ const getActivitiesByType = (activities: Activity[], type?: string) => {
 
 export default () => {
     const { id } = useParams();
-    const { data, loading } = useGetClient(id);
+    const { data } = useClientQuery({ variables: { _id: id } });
     const pageTitle = data && data.client.name ? data.client.name : '';
-    const detail = data && data.client && (
+    const detail = (data && data.client && (
         <ClientDetails client={data.client} />
-    );
+    )) || <div />;
 
     const activeTabId = 'all';
 
-    const activities: Activity[] =
+    const activities: Activities =
         (data && data.client && data.client.activities) || [];
     return (
         <Detail pageTitle={pageTitle} left={<Navigation />} details={detail}>
-            {data && data.client && <AddActivity clientId={data.client._id} />}
-            <Tab type="minimal" active={activeTabId}>
-                <TabContent id="all" label="Activities">
-                    {getActivitiesByType(activities).map(activity => (
-                        <UpdateActivity
-                            key={activity._id}
-                            activity={activity}
-                        />
-                    ))}
-                </TabContent>
-                <TabContent id="task" label="Tasks">
-                    {getActivitiesByType(activities, 'task').map(activity => (
-                        <UpdateActivity
-                            key={activity._id}
-                            activity={activity}
-                        />
-                    ))}
-                </TabContent>
-                <TabContent id="call" label="Call">
-                    {getActivitiesByType(activities, 'call').map(activity => (
-                        <UpdateActivity
-                            key={activity._id}
-                            activity={activity}
-                        />
-                    ))}
-                </TabContent>
-            </Tab>
+            {(data && data.client && (
+                <AddActivity clientId={data.client._id} />
+            )) || <div />}
+            {(data && data.client && (
+                <Tab type="minimal" active={activeTabId}>
+                    <TabContent id="all" label="Activities">
+                        {getActivitiesByType(activities).map(activity => (
+                            <UpdateActivity
+                                key={activity._id}
+                                activity={activity}
+                                clientId={data.client._id}
+                            />
+                        ))}
+                    </TabContent>
+                    <TabContent id="task" label="Tasks">
+                        {getActivitiesByType(activities, 'task').map(
+                            activity => (
+                                <UpdateActivity
+                                    key={activity._id}
+                                    activity={activity}
+                                    clientId={data.client._id}
+                                />
+                            )
+                        )}
+                    </TabContent>
+                    <TabContent id="call" label="Call">
+                        {getActivitiesByType(activities, 'call').map(
+                            activity => (
+                                <UpdateActivity
+                                    key={activity._id}
+                                    activity={activity}
+                                    clientId={data.client._id}
+                                />
+                            )
+                        )}
+                    </TabContent>
+                </Tab>
+            )) || <div />}
         </Detail>
     );
 };

@@ -1,52 +1,38 @@
-import React from 'react';
 import dotProp from 'dot-prop';
+import React from 'react';
 import Basic from 'react-ui/build/Layout/Basic';
 import Navigation from '../Navigation';
-import getUser from '../../modules/user/getUser.graphql';
 
 import { ChangedItem, ChangeOptions } from 'react-ui/build/Form';
+import Tab, { TabContent } from 'react-ui/build/Tab/Tab';
 import BasicInfo from '../../components/Settings/BasicInfo';
 import Companies from '../../components/Settings/Companies';
 import Privacy from '../../components/Settings/Privacy';
-import Tab, { TabContent } from 'react-ui/build/Tab/Tab';
 
 import {
-    useUser,
-    ValidationSchema,
-    useUpdateUser,
     User,
-} from '../../modules/user';
-import { Button } from 'react-ui/build/Button';
+    UserDocument,
+    useUpdateUserMutation,
+    useUserQuery,
+} from '../../modules/hooks';
 
-import { useApolloClient } from '@apollo/react-hooks';
-
-// const user = {
-//     firstName: 'Randy',
-//     lastName: 'Konings',
-//     password: 'randykonings',
-//     email: 'randy@randykonings.nl',
-//     settings: {
-//         language: 'UK',
-//         dateFormat: 'UK',
-//         pushNotifications: true,
-//         unscribeEmailLink: true,
-//         signature: 'This is a faker signature. Really cool!',
-//     },
-// };
+import { ValidationSchema } from '../../modules/user';
 
 const Settings = () => {
-    const { data } = useUser({
+    const { data } = useUserQuery({
         fetchPolicy: 'cache-only',
     });
-    const [updateUser] = useUpdateUser({
+
+    const [user, setUser] = React.useState<Omit<User, 'password'>>();
+
+    const [updateUser] = useUpdateUserMutation({
+        refetchQueries: [{ query: UserDocument }],
         onCompleted: data => {
             if (data && data.updateUser) {
                 setUser(data.updateUser);
             }
         },
     });
-
-    const [user, setUser] = React.useState<User>();
 
     React.useEffect(() => {
         if (data && data.user) {

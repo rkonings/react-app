@@ -2,13 +2,14 @@ import React from 'react';
 import Navigation from '../Navigation';
 import Basic from 'react-ui/build/Layout/Basic';
 import { ResponsiveDataTable } from 'react-ui/build/DataTable/';
-import { useGetClients, Client } from '../../modules/client';
 import { AddClient } from '../../modules/client/components/addClient';
 import { UpdateClient } from '../../modules/client/components/updateClient';
 import { DataField, DataRow } from 'react-ui/build/interfaces/Data';
 import { Edit, Options, Trash } from 'react-ui/build/Icon';
 import RowAction from 'react-ui/build/DataTable/DataTableRowAction';
 import ButtonGroup from 'react-ui/build/ButtonGroup/ButtonGroup';
+
+import { useClientsQuery } from '../../modules/hooks';
 
 import {
     ClientFilter,
@@ -134,13 +135,15 @@ export default () => {
         },
     ];
     const filter = useQueryFilter();
-    const { loading, data } = useGetClients(filter);
+    const { loading, data } = useClientsQuery({ variables: filter });
 
-    let clients: DataRow[] = [];
+    const clients: DataRow[] = [];
 
     if (data) {
-        clients = data.clients.map((client: Client) => {
-            return { data: client };
+        data.clients.forEach(client => {
+            clients.push({
+                data: client,
+            });
         });
     }
 

@@ -7,14 +7,16 @@ import { ChangedItem, ChangeOptions } from 'react-ui/build/Form';
 import { ValidationSchema } from '../../activity';
 import {
     Activity as ActivityInterface,
+    ClientDocument,
     useUpdateActivityMutation,
 } from '../../hooks';
 
 interface Activity {
-    activity: ActivityInterface;
+    activity: Omit<ActivityInterface, 'user' | 'client'>;
+    clientId: string;
 }
 
-export default ({ activity }: Activity) => {
+export default ({ activity, clientId }: Activity) => {
     const [updateActivity] = useUpdateActivityMutation();
 
     const onChangeHandler = (
@@ -28,7 +30,9 @@ export default ({ activity }: Activity) => {
         }, {});
 
         updateActivity({
-            refetchQueries: ['GET_CLIENT'],
+            refetchQueries: [
+                { query: ClientDocument, variables: { _id: clientId } },
+            ],
             variables: { activity: { _id: activity._id, ...update } },
             update: () => {
                 if (callBack) {

@@ -1,24 +1,41 @@
+import dotProp from 'dot-prop';
 import React from 'react';
-import { Client, ValidationSchema, useUpdateClient } from '../';
-import {
-    ValidationErrors,
-    mapValidationErrors,
-} from 'react-ui/build/Validation';
-import { Title } from 'react-ui/build/Layout/Title';
+import Button from 'react-ui/build/Button/Button';
 import { InputField } from 'react-ui/build/Form';
 import { InlineEditableTextField } from 'react-ui/build/Input/InlineEditable/InlineEditableTextField';
-import dotProp from 'dot-prop';
-import Button from 'react-ui/build/Button/Button';
+import { Title } from 'react-ui/build/Layout/Title';
+import {
+    mapValidationErrors,
+    ValidationErrors,
+} from 'react-ui/build/Validation';
+import { ValidationSchema } from '../';
+import {
+    Activity,
+    Client,
+    ClientDocument,
+    Maybe,
+    useUpdateClientMutation,
+} from '../../hooks';
+
+interface UpdateClientValues extends Omit<Client, 'activities' | 'user'> {
+    activities: Maybe<Array<Maybe<Omit<Activity, 'user' | 'client'>>>>;
+}
 
 interface ClientDetails {
     className?: string;
-    client: Client;
+    client: UpdateClientValues;
 }
 
 export default ({ className, client }: ClientDetails) => {
-    const [updateClient] = useUpdateClient();
+    const [updateClient] = useUpdateClientMutation({
+        refetchQueries: [
+            { query: ClientDocument, variables: { _id: client._id } },
+        ],
+    });
 
-    const [inputValues, setInputValues] = React.useState<Client>(client);
+    const [inputValues, setInputValues] = React.useState<UpdateClientValues>(
+        client
+    );
     const [inputErrors, setInputErrors] = React.useState<ValidationErrors>(
         new Map()
     );
@@ -30,7 +47,7 @@ export default ({ className, client }: ClientDetails) => {
         field: string,
         value: boolean | number | string
     ) => {
-        const values: Client = { ...inputValues };
+        const values: UpdateClientValues = { ...inputValues };
         dotProp.set(values, field, value);
         setInputValues(values);
 

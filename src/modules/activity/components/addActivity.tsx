@@ -1,21 +1,20 @@
-import React from 'react';
 import dotProp from 'dot-prop';
+import React from 'react';
 
+import { Activity } from 'react-ui/build/Activity/Activity';
 import { Button, TextButton } from 'react-ui/build/Button';
 import ButtonGroup from 'react-ui/build/ButtonGroup/ButtonGroup';
+import PopupInput from 'react-ui/build/CombinedInput/PopupInput';
+import { ChangedItem, ChangeOptions, InputField } from 'react-ui/build/Form';
+import TextField from 'react-ui/build/Input/TextField/TextField';
 import {
     PopupContent,
     PopupFooter,
     PopupHeader,
 } from 'react-ui/build/Popup/Popup';
-import PopupInput from 'react-ui/build/CombinedInput/PopupInput';
-import { ValidationSchema, useAddActivity } from '../';
-import { InputField, ChangedItem, ChangeOptions } from 'react-ui/build/Form';
-import TextField from 'react-ui/build/Input/TextField/TextField';
-import { Activity } from 'react-ui/build/Activity/Activity';
+import { ValidationSchema } from '../';
 
-import { useCreateActivityMutation, Client } from '../../hooks';
-import GET_CLIENT from '../../client/getClient.graphql';
+import { ClientDocument, useCreateActivityMutation } from '../../hooks';
 
 interface AddActivity {
     onAdded?: () => void;
@@ -35,8 +34,6 @@ export const AddActivity = ({ onAdded, clientId }: AddActivity) => {
             return obj;
         }, {});
 
-        // console.log(items);
-
         const activity = {
             title: '',
             type: 'call',
@@ -46,7 +43,7 @@ export const AddActivity = ({ onAdded, clientId }: AddActivity) => {
         createActivity({
             variables: { activity: { ...activity, ...update } },
             refetchQueries: [
-                { query: GET_CLIENT, variables: { _id: clientId } },
+                { query: ClientDocument, variables: { _id: clientId } },
             ],
             update: () => {
                 if (callBack) {

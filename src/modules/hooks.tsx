@@ -42,8 +42,8 @@ export type Client = {
   telephone: Scalars['String'],
   city: Scalars['String'],
   user: Scalars['String'],
-  type?: Maybe<Scalars['String']>,
-  activities?: Maybe<Array<Maybe<Activity>>>,
+  type: Scalars['String'],
+  activities: Array<Activity>,
 };
 
 export type ClientInput = {
@@ -69,7 +69,7 @@ export type CreateActivityInput = {
 
 export type Filter = {
    __typename?: 'Filter',
-  options: Array<Maybe<FilterOption>>,
+  options: Array<FilterOption>,
   id: Scalars['String'],
   label: Scalars['String'],
 };
@@ -163,12 +163,12 @@ export type Query = {
   posts?: Maybe<Array<Maybe<Post>>>,
   authors?: Maybe<Array<Maybe<Author>>>,
   users?: Maybe<Array<Maybe<User>>>,
-  user?: Maybe<User>,
-  client?: Maybe<Client>,
-  clients?: Maybe<Array<Maybe<Client>>>,
-  activity?: Maybe<Activity>,
+  user: User,
+  client: Client,
+  clients: Array<Client>,
+  activity: Activity,
   activities?: Maybe<Array<Maybe<Activity>>>,
-  filter?: Maybe<Array<Maybe<Filter>>>,
+  filter: Array<Filter>,
 };
 
 
@@ -228,7 +228,7 @@ export type User = {
   password: Scalars['String'],
   firstName: Scalars['String'],
   lastName: Scalars['String'],
-  settings?: Maybe<Settings>,
+  settings: Settings,
 };
 
 export type ActivityFragment = (
@@ -267,10 +267,122 @@ export type ActivityQueryVariables = {};
 
 export type ActivityQuery = (
   { __typename?: 'Query' }
-  & { activity: Maybe<(
+  & { activity: (
     { __typename?: 'Activity' }
     & ActivityFragment
+  ) }
+);
+
+export type ClientFragment = (
+  { __typename?: 'Client' }
+  & Pick<Client, '_id' | 'name' | 'telephone' | 'address' | 'city' | 'zipcode' | 'type'>
+);
+
+export type CreateClientMutationVariables = {
+  client?: Maybe<ClientInput>
+};
+
+
+export type CreateClientMutation = (
+  { __typename?: 'Mutation' }
+  & { addClient: Maybe<(
+    { __typename?: 'Client' }
+    & ClientFragment
   )> }
+);
+
+export type UpdateClientMutationVariables = {
+  client?: Maybe<ClientInput>
+};
+
+
+export type UpdateClientMutation = (
+  { __typename?: 'Mutation' }
+  & { updateClient: Maybe<(
+    { __typename?: 'Client' }
+    & ClientFragment
+  )> }
+);
+
+export type ClientQueryVariables = {
+  _id?: Maybe<Scalars['String']>
+};
+
+
+export type ClientQuery = (
+  { __typename?: 'Query' }
+  & { client: (
+    { __typename?: 'Client' }
+    & { activities: Array<(
+      { __typename?: 'Activity' }
+      & ActivityFragment
+    )> }
+    & ClientFragment
+  ) }
+);
+
+export type ClientsQueryVariables = {
+  type?: Maybe<Array<Maybe<Scalars['String']>>>,
+  city?: Maybe<Array<Maybe<Scalars['String']>>>
+};
+
+
+export type ClientsQuery = (
+  { __typename?: 'Query' }
+  & { clients: Array<(
+    { __typename?: 'Client' }
+    & ClientFragment
+  )> }
+);
+
+export type FiltersQueryVariables = {
+  types: Array<Scalars['String']>
+};
+
+
+export type FiltersQuery = (
+  { __typename?: 'Query' }
+  & { filter: Array<(
+    { __typename?: 'Filter' }
+    & Pick<Filter, 'id' | 'label'>
+    & { options: Array<(
+      { __typename?: 'FilterOption' }
+      & Pick<FilterOption, 'label' | 'value'>
+    )> }
+  )> }
+);
+
+export type UserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, '_id' | 'email' | 'firstName' | 'lastName'>
+  & { settings: (
+    { __typename?: 'Settings' }
+    & Pick<Settings, 'language' | 'dateFormat' | 'pushNotifications' | 'unscribeEmailLink' | 'signature'>
+  ) }
+);
+
+export type UpdateUserMutationVariables = {
+  user?: Maybe<InputUser>
+};
+
+
+export type UpdateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUser: Maybe<(
+    { __typename?: 'User' }
+    & UserFragment
+  )> }
+);
+
+export type UserQueryVariables = {};
+
+
+export type UserQuery = (
+  { __typename?: 'Query' }
+  & { user: (
+    { __typename?: 'User' }
+    & UserFragment
+  ) }
 );
 
 export const ActivityFragmentDoc = gql`
@@ -281,6 +393,32 @@ export const ActivityFragmentDoc = gql`
   type
   creationDate
   dueDate
+}
+    `;
+export const ClientFragmentDoc = gql`
+    fragment Client on Client {
+  _id
+  name
+  telephone
+  address
+  city
+  zipcode
+  type
+}
+    `;
+export const UserFragmentDoc = gql`
+    fragment User on User {
+  _id
+  email
+  firstName
+  lastName
+  settings {
+    language
+    dateFormat
+    pushNotifications
+    unscribeEmailLink
+    signature
+  }
 }
     `;
 export const CreateActivityDocument = gql`
@@ -379,3 +517,240 @@ export function useActivityLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHoo
 export type ActivityQueryHookResult = ReturnType<typeof useActivityQuery>;
 export type ActivityLazyQueryHookResult = ReturnType<typeof useActivityLazyQuery>;
 export type ActivityQueryResult = ApolloReactCommon.QueryResult<ActivityQuery, ActivityQueryVariables>;
+export const CreateClientDocument = gql`
+    mutation CreateClient($client: ClientInput) {
+  addClient(client: $client) {
+    ...Client
+  }
+}
+    ${ClientFragmentDoc}`;
+export type CreateClientMutationFn = ApolloReactCommon.MutationFunction<CreateClientMutation, CreateClientMutationVariables>;
+
+/**
+ * __useCreateClientMutation__
+ *
+ * To run a mutation, you first call `useCreateClientMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateClientMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createClientMutation, { data, loading, error }] = useCreateClientMutation({
+ *   variables: {
+ *      client: // value for 'client'
+ *   },
+ * });
+ */
+export function useCreateClientMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateClientMutation, CreateClientMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateClientMutation, CreateClientMutationVariables>(CreateClientDocument, baseOptions);
+      }
+export type CreateClientMutationHookResult = ReturnType<typeof useCreateClientMutation>;
+export type CreateClientMutationResult = ApolloReactCommon.MutationResult<CreateClientMutation>;
+export type CreateClientMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateClientMutation, CreateClientMutationVariables>;
+export const UpdateClientDocument = gql`
+    mutation updateClient($client: ClientInput) {
+  updateClient(client: $client) {
+    ...Client
+  }
+}
+    ${ClientFragmentDoc}`;
+export type UpdateClientMutationFn = ApolloReactCommon.MutationFunction<UpdateClientMutation, UpdateClientMutationVariables>;
+
+/**
+ * __useUpdateClientMutation__
+ *
+ * To run a mutation, you first call `useUpdateClientMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateClientMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateClientMutation, { data, loading, error }] = useUpdateClientMutation({
+ *   variables: {
+ *      client: // value for 'client'
+ *   },
+ * });
+ */
+export function useUpdateClientMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateClientMutation, UpdateClientMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateClientMutation, UpdateClientMutationVariables>(UpdateClientDocument, baseOptions);
+      }
+export type UpdateClientMutationHookResult = ReturnType<typeof useUpdateClientMutation>;
+export type UpdateClientMutationResult = ApolloReactCommon.MutationResult<UpdateClientMutation>;
+export type UpdateClientMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateClientMutation, UpdateClientMutationVariables>;
+export const ClientDocument = gql`
+    query client($_id: String) {
+  client(_id: $_id) {
+    ...Client
+    activities {
+      ...Activity
+    }
+  }
+}
+    ${ClientFragmentDoc}
+${ActivityFragmentDoc}`;
+
+/**
+ * __useClientQuery__
+ *
+ * To run a query within a React component, call `useClientQuery` and pass it any options that fit your needs.
+ * When your component renders, `useClientQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useClientQuery({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function useClientQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ClientQuery, ClientQueryVariables>) {
+        return ApolloReactHooks.useQuery<ClientQuery, ClientQueryVariables>(ClientDocument, baseOptions);
+      }
+export function useClientLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ClientQuery, ClientQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<ClientQuery, ClientQueryVariables>(ClientDocument, baseOptions);
+        }
+export type ClientQueryHookResult = ReturnType<typeof useClientQuery>;
+export type ClientLazyQueryHookResult = ReturnType<typeof useClientLazyQuery>;
+export type ClientQueryResult = ApolloReactCommon.QueryResult<ClientQuery, ClientQueryVariables>;
+export const ClientsDocument = gql`
+    query clients($type: [String], $city: [String]) {
+  clients(type: $type, city: $city) {
+    ...Client
+  }
+}
+    ${ClientFragmentDoc}`;
+
+/**
+ * __useClientsQuery__
+ *
+ * To run a query within a React component, call `useClientsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useClientsQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useClientsQuery({
+ *   variables: {
+ *      type: // value for 'type'
+ *      city: // value for 'city'
+ *   },
+ * });
+ */
+export function useClientsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<ClientsQuery, ClientsQueryVariables>) {
+        return ApolloReactHooks.useQuery<ClientsQuery, ClientsQueryVariables>(ClientsDocument, baseOptions);
+      }
+export function useClientsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<ClientsQuery, ClientsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<ClientsQuery, ClientsQueryVariables>(ClientsDocument, baseOptions);
+        }
+export type ClientsQueryHookResult = ReturnType<typeof useClientsQuery>;
+export type ClientsLazyQueryHookResult = ReturnType<typeof useClientsLazyQuery>;
+export type ClientsQueryResult = ApolloReactCommon.QueryResult<ClientsQuery, ClientsQueryVariables>;
+export const FiltersDocument = gql`
+    query filters($types: [String!]!) {
+  filter(types: $types) {
+    options {
+      label
+      value
+    }
+    id
+    label
+  }
+}
+    `;
+
+/**
+ * __useFiltersQuery__
+ *
+ * To run a query within a React component, call `useFiltersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFiltersQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFiltersQuery({
+ *   variables: {
+ *      types: // value for 'types'
+ *   },
+ * });
+ */
+export function useFiltersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FiltersQuery, FiltersQueryVariables>) {
+        return ApolloReactHooks.useQuery<FiltersQuery, FiltersQueryVariables>(FiltersDocument, baseOptions);
+      }
+export function useFiltersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FiltersQuery, FiltersQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<FiltersQuery, FiltersQueryVariables>(FiltersDocument, baseOptions);
+        }
+export type FiltersQueryHookResult = ReturnType<typeof useFiltersQuery>;
+export type FiltersLazyQueryHookResult = ReturnType<typeof useFiltersLazyQuery>;
+export type FiltersQueryResult = ApolloReactCommon.QueryResult<FiltersQuery, FiltersQueryVariables>;
+export const UpdateUserDocument = gql`
+    mutation updateUser($user: InputUser) {
+  updateUser(user: $user) {
+    ...User
+  }
+}
+    ${UserFragmentDoc}`;
+export type UpdateUserMutationFn = ApolloReactCommon.MutationFunction<UpdateUserMutation, UpdateUserMutationVariables>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      user: // value for 'user'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, baseOptions);
+      }
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = ApolloReactCommon.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const UserDocument = gql`
+    query User {
+  user {
+    ...User
+  }
+}
+    ${UserFragmentDoc}`;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        return ApolloReactHooks.useQuery<UserQuery, UserQueryVariables>(UserDocument, baseOptions);
+      }
+export function useUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, baseOptions);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = ApolloReactCommon.QueryResult<UserQuery, UserQueryVariables>;
