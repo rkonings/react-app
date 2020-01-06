@@ -3,7 +3,7 @@ import { FilterConfig } from 'react-ui/build/Filters/Filter';
 import FilterPopup from 'react-ui/build/Filters/FilterPopup';
 import queryString from 'query-string';
 import { useParams, useHistory } from 'react-router';
-import { useGetFilters } from '../';
+import { useFiltersQuery } from '../../hooks';
 
 export const useQueryFilter = (): { [key: string]: string[] } => {
     const { filter } = useParams();
@@ -32,14 +32,16 @@ export const useQueryFilter = (): { [key: string]: string[] } => {
 
 export const ClientFilter = () => {
     const history = useHistory();
-    const { data } = useGetFilters(['city', 'type']);
+    const { data } = useFiltersQuery({
+        variables: { types: ['city', 'type'] },
+    });
     const filter = useQueryFilter();
 
     const setFilter = (filter: { [key: string]: string[] }) => {
         const query = queryString.stringify(filter, { arrayFormat: 'comma' });
         history.push('/clients/' + query + '/');
     };
-    if (data && data.filter) {
+    if (data) {
         data.filter.forEach((item: FilterConfig) => {
             if (filter[item.id]) {
                 item.value = filter[item.id];
