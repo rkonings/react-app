@@ -1,20 +1,20 @@
-import React from 'react';
 import dotProp from 'dot-prop';
+import React from 'react';
 
+import { Activity } from 'react-ui/build/Activity/Activity';
 import { Button, TextButton } from 'react-ui/build/Button';
 import ButtonGroup from 'react-ui/build/ButtonGroup/ButtonGroup';
+import PopupInput from 'react-ui/build/CombinedInput/PopupInput';
+import { ChangedItem, ChangeOptions, InputField } from 'react-ui/build/Form';
+import TextField from 'react-ui/build/Input/TextField/TextField';
 import {
     PopupContent,
     PopupFooter,
     PopupHeader,
 } from 'react-ui/build/Popup/Popup';
-import PopupInput from 'react-ui/build/CombinedInput/PopupInput';
 import { ValidationSchema } from '../';
-import { InputField, ChangedItem, ChangeOptions } from 'react-ui/build/Form';
-import TextField from 'react-ui/build/Input/TextField/TextField';
-import { Activity } from 'react-ui/build/Activity/Activity';
 
-import { useCreateActivityMutation, Client, ClientDocument } from '../../hooks';
+import { ClientDocument, useCreateActivityMutation } from '../../hooks';
 
 interface AddActivity {
     onAdded?: () => void;
@@ -33,8 +33,6 @@ export const AddActivity = ({ onAdded, clientId }: AddActivity) => {
             dotProp.set(obj, item.field, item.value);
             return obj;
         }, {});
-
-        // console.log(items);
 
         const activity = {
             title: '',
