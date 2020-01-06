@@ -9,13 +9,12 @@ import {
     PopupHeader,
 } from 'react-ui/build/Popup/Popup';
 import PopupInput from 'react-ui/build/CombinedInput/PopupInput';
-import { ValidationSchema, useAddActivity } from '../';
+import { ValidationSchema } from '../';
 import { InputField, ChangedItem, ChangeOptions } from 'react-ui/build/Form';
 import TextField from 'react-ui/build/Input/TextField/TextField';
 import { Activity } from 'react-ui/build/Activity/Activity';
 
-import { useCreateActivityMutation, Client } from '../../hooks';
-import GET_CLIENT from '../../client/getClient.graphql';
+import { useCreateActivityMutation, Client, ClientDocument } from '../../hooks';
 
 interface AddActivity {
     onAdded?: () => void;
@@ -46,7 +45,7 @@ export const AddActivity = ({ onAdded, clientId }: AddActivity) => {
         createActivity({
             variables: { activity: { ...activity, ...update } },
             refetchQueries: [
-                { query: GET_CLIENT, variables: { _id: clientId } },
+                { query: ClientDocument, variables: { _id: clientId } },
             ],
             update: () => {
                 if (callBack) {
