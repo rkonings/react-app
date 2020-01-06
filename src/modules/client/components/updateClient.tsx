@@ -9,20 +9,26 @@ import {
     PopupHeader,
 } from 'react-ui/build/Popup/Popup';
 import { PopupCoreInput } from 'react-ui/build/CombinedInput/PopupInput';
-import { ValidationSchema, Client, useUpdateClient, useGetClient } from '../';
+import { ValidationSchema, useUpdateClient } from '../';
 import { InputField, ChangedItem, ChangeOptions } from 'react-ui/build/Form';
 import TextField from 'react-ui/build/Input/TextField/TextField';
 import { PopoverFooter } from 'react-ui/build/Popover/Popover';
+import { useClientQuery, Client, Activity, Maybe } from '../../hooks';
 
 interface UpdateClient {
     _id: string;
     close: () => void;
 }
 
+interface UpdateClientValues extends Omit<Client, 'activities' | 'user'> {
+    activities: Maybe<Array<Maybe<Omit<Activity, 'user' | 'client'>>>>;
+}
+
 export const UpdateClient = ({ _id, close }: UpdateClient) => {
     const [updateClient] = useUpdateClient({ onCompleted: () => close() });
 
-    const { data, loading } = useGetClient(_id, {
+    const { data, loading } = useClientQuery({
+        variables: { _id },
         fetchPolicy: 'network-only',
     });
 
@@ -45,8 +51,8 @@ export const UpdateClient = ({ _id, close }: UpdateClient) => {
     return (
         <React.Fragment>
             {loading && <h1>Loading</h1>}
-            {!loading && data && (
-                <PopupCoreInput<Client>
+            {!loading && data && data.client && (
+                <PopupCoreInput<UpdateClientValues>
                     validationSchema={ValidationSchema}
                     values={data.client}
                     clickAway={close}
