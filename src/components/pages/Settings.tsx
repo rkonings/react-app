@@ -11,11 +11,13 @@ import Privacy from '../../components/Settings/Privacy';
 import Tab, { TabContent } from 'react-ui/build/Tab/Tab';
 
 import {
-    useUser,
-    ValidationSchema,
-    useUpdateUser,
+    useUpdateUserMutation,
+    useUserQuery,
     User,
-} from '../../modules/user';
+    UserDocument,
+} from '../../modules/hooks';
+
+import { useUser, ValidationSchema, useUpdateUser } from '../../modules/user';
 import { Button } from 'react-ui/build/Button';
 
 import { useApolloClient } from '@apollo/react-hooks';
@@ -35,18 +37,20 @@ import { useApolloClient } from '@apollo/react-hooks';
 // };
 
 const Settings = () => {
-    const { data } = useUser({
+    const { data } = useUserQuery({
         fetchPolicy: 'cache-only',
     });
-    const [updateUser] = useUpdateUser({
+
+    const [user, setUser] = React.useState<Omit<User, 'password'>>();
+
+    const [updateUser] = useUpdateUserMutation({
+        refetchQueries: [{ query: UserDocument }],
         onCompleted: data => {
             if (data && data.updateUser) {
                 setUser(data.updateUser);
             }
         },
     });
-
-    const [user, setUser] = React.useState<User>();
 
     React.useEffect(() => {
         if (data && data.user) {

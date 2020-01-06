@@ -25,6 +25,7 @@ import { PopoverFooter } from 'react-ui/build/Popover/Popover';
 
 import { Button } from 'react-ui/build/Button';
 import TextButton from 'react-ui/build/Button/TextButton';
+import { User } from '../../modules/hooks';
 
 export interface UserSettings {
     language: string;
@@ -34,16 +35,8 @@ export interface UserSettings {
     signature: string;
 }
 
-export interface User {
-    firstName: string;
-    lastName: string;
-    settings: UserSettings;
-    password: string;
-    email: string;
-}
-
 interface BasicInfo {
-    user: User;
+    user: Omit<User, 'password'>;
     onChange: OnChangeHandler;
     errors: ValidationErrors;
     validationSchema: Yup.ObjectSchema;

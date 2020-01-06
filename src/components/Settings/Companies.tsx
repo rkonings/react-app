@@ -18,6 +18,8 @@ import { InputField } from 'react-ui/build/Form';
 import { Button } from 'react-ui/build/Button';
 import TextButton from 'react-ui/build/Button/TextButton';
 
+import { User } from '../../modules/hooks';
+
 export interface UserSettings {
     language: string;
     dateFormat: string;
@@ -26,16 +28,8 @@ export interface UserSettings {
     signature: string;
 }
 
-export interface User {
-    firstName: string;
-    lastName: string;
-    settings: UserSettings;
-    password: string;
-    email: string;
-}
-
 interface Companies {
-    user: User;
+    user: Omit<User, 'password'>;
     onChange: OnChangeHandler;
     errors: ValidationErrors;
     validationSchema: Yup.ObjectSchema;
