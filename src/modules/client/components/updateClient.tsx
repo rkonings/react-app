@@ -1,19 +1,19 @@
-import React from 'react';
 import dotProp from 'dot-prop';
+import React from 'react';
 
 import { Button, TextButton } from 'react-ui/build/Button';
 import ButtonGroup from 'react-ui/build/ButtonGroup/ButtonGroup';
+import { PopupCoreInput } from 'react-ui/build/CombinedInput/PopupInput';
+import { ChangedItem, ChangeOptions, InputField } from 'react-ui/build/Form';
+import TextField from 'react-ui/build/Input/TextField/TextField';
+import { PopoverFooter } from 'react-ui/build/Popover/Popover';
 import {
     PopupContent,
     PopupFooter,
     PopupHeader,
 } from 'react-ui/build/Popup/Popup';
-import { PopupCoreInput } from 'react-ui/build/CombinedInput/PopupInput';
-import { ValidationSchema, useUpdateClient } from '../';
-import { InputField, ChangedItem, ChangeOptions } from 'react-ui/build/Form';
-import TextField from 'react-ui/build/Input/TextField/TextField';
-import { PopoverFooter } from 'react-ui/build/Popover/Popover';
-import { useClientQuery, Client, Activity, Maybe } from '../../hooks';
+import { useUpdateClient, ValidationSchema } from '../';
+import { Activity, Client, Maybe, useClientQuery } from '../../hooks';
 
 interface UpdateClient {
     _id: string;

@@ -1,18 +1,18 @@
-import React from 'react';
 import dotProp from 'dot-prop';
+import React from 'react';
 
 import { Button, TextButton } from 'react-ui/build/Button';
 import ButtonGroup from 'react-ui/build/ButtonGroup/ButtonGroup';
+import PopupInput from 'react-ui/build/CombinedInput/PopupInput';
+import { ChangedItem, ChangeOptions, InputField } from 'react-ui/build/Form';
+import TextField from 'react-ui/build/Input/TextField/TextField';
 import {
     PopupContent,
     PopupFooter,
     PopupHeader,
 } from 'react-ui/build/Popup/Popup';
-import PopupInput from 'react-ui/build/CombinedInput/PopupInput';
 import { ValidationSchema } from '../';
 import { Client, ClientsDocument, useCreateClientMutation } from '../../hooks';
-import { InputField, ChangedItem, ChangeOptions } from 'react-ui/build/Form';
-import TextField from 'react-ui/build/Input/TextField/TextField';
 
 interface AddClient {
     onAdded?: () => void;

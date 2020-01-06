@@ -1,14 +1,14 @@
+import dotProp from 'dot-prop';
 import React from 'react';
-import { Client, ValidationSchema, useUpdateClient } from '../';
-import {
-    ValidationErrors,
-    mapValidationErrors,
-} from 'react-ui/build/Validation';
-import { Title } from 'react-ui/build/Layout/Title';
+import Button from 'react-ui/build/Button/Button';
 import { InputField } from 'react-ui/build/Form';
 import { InlineEditableTextField } from 'react-ui/build/Input/InlineEditable/InlineEditableTextField';
-import dotProp from 'dot-prop';
-import Button from 'react-ui/build/Button/Button';
+import { Title } from 'react-ui/build/Layout/Title';
+import {
+    mapValidationErrors,
+    ValidationErrors,
+} from 'react-ui/build/Validation';
+import { Client, useUpdateClient, ValidationSchema } from '../';
 
 interface ClientDetails {
     className?: string;

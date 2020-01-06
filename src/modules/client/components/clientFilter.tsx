@@ -1,8 +1,8 @@
+import queryString from 'query-string';
 import React from 'react';
+import { useHistory, useParams } from 'react-router';
 import { FilterConfig } from 'react-ui/build/Filters/Filter';
 import FilterPopup from 'react-ui/build/Filters/FilterPopup';
-import queryString from 'query-string';
-import { useParams, useHistory } from 'react-router';
 import { useFiltersQuery } from '../../hooks';
 
 export const useQueryFilter = (): { [key: string]: string[] } => {
@@ -15,7 +15,7 @@ export const useQueryFilter = (): { [key: string]: string[] } => {
 
         return Object.keys(parsedFilter).reduce<{ [name: string]: string[] }>(
             (obj, key) => {
-                let value = parsedFilter[key];
+                const value = parsedFilter[key];
                 if (value instanceof Array) {
                     obj[key] = value;
                 } else if (typeof value === 'string') {
