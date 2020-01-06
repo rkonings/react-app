@@ -12,8 +12,15 @@ import {
     PopupFooter,
     PopupHeader,
 } from 'react-ui/build/Popup/Popup';
-import { useUpdateClient, ValidationSchema } from '../';
-import { Activity, Client, Maybe, useClientQuery } from '../../hooks';
+import { ValidationSchema } from '../';
+import {
+    Activity,
+    Client,
+    ClientDocument,
+    Maybe,
+    useClientQuery,
+    useUpdateClientMutation,
+} from '../../hooks';
 
 interface UpdateClient {
     _id: string;
@@ -25,7 +32,10 @@ interface UpdateClientValues extends Omit<Client, 'activities' | 'user'> {
 }
 
 export const UpdateClient = ({ _id, close }: UpdateClient) => {
-    const [updateClient] = useUpdateClient({ onCompleted: () => close() });
+    const [updateClient] = useUpdateClientMutation({
+        refetchQueries: [{ query: ClientDocument, variables: { _id } }],
+        onCompleted: () => close(),
+    });
 
     const { data, loading } = useClientQuery({
         variables: { _id },
