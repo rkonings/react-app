@@ -2,6 +2,7 @@ import React from 'react';
 import Navigation from '../Navigation';
 import Basic from 'react-ui/build/Layout/Basic';
 import { ResponsiveDataTable } from 'react-ui/build/DataTable/';
+import { Sort } from 'react-ui/build/DataTable/DataTable';
 import { AddClient } from '../../modules/client/components/addClient';
 import { UpdateClient } from '../../modules/client/components/updateClient';
 import { DataField, DataRow } from 'react-ui/build/interfaces/Data';
@@ -14,6 +15,7 @@ import {
     useClientsQuery,
     useDeleteClientMutation,
     ClientsDocument,
+    SortDirectionInput,
 } from '../../modules/hooks';
 
 import {
@@ -159,7 +161,7 @@ export default () => {
         },
     ];
 
-    const { loading, data } = useClientsQuery({ variables: filter });
+    const { loading, data, refetch } = useClientsQuery({ variables: filter });
 
     const clients: DataRow[] = [];
 
@@ -170,6 +172,17 @@ export default () => {
             });
         });
     }
+
+    const sortHandler = (sort: Sort) => {
+        const transformedSort = {
+            field: sort.field.name,
+            direction:
+                sort.direction === 'ASC'
+                    ? SortDirectionInput.Asc
+                    : SortDirectionInput.Desc,
+        };
+        refetch({ ...filter, sort: transformedSort });
+    };
 
     return (
         <React.Fragment>
@@ -183,6 +196,7 @@ export default () => {
                             data={clients}
                             fields={fields}
                             loading={loading}
+                            sortHandler={sortHandler}
                         />
                     </React.Fragment>
                 </React.Fragment>
