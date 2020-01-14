@@ -184,9 +184,9 @@ export type QueryClientArgs = {
 
 
 export type QueryClientsArgs = {
+  sort?: Maybe<SortInput>,
   type?: Maybe<Array<Maybe<Scalars['String']>>>,
-  city?: Maybe<Array<Maybe<Scalars['String']>>>,
-  sort?: Maybe<SortInput>
+  city?: Maybe<Array<Maybe<Scalars['String']>>>
 };
 
 
@@ -353,7 +353,8 @@ export type ClientQuery = (
 
 export type ClientsQueryVariables = {
   type?: Maybe<Array<Maybe<Scalars['String']>>>,
-  city?: Maybe<Array<Maybe<Scalars['String']>>>
+  city?: Maybe<Array<Maybe<Scalars['String']>>>,
+  sort?: Maybe<SortInput>
 };
 
 
@@ -681,8 +682,8 @@ export type ClientQueryHookResult = ReturnType<typeof useClientQuery>;
 export type ClientLazyQueryHookResult = ReturnType<typeof useClientLazyQuery>;
 export type ClientQueryResult = ApolloReactCommon.QueryResult<ClientQuery, ClientQueryVariables>;
 export const ClientsDocument = gql`
-    query clients($type: [String], $city: [String]) {
-  clients(type: $type, city: $city) {
+    query clients($type: [String], $city: [String], $sort: SortInput) {
+  clients(type: $type, city: $city, sort: $sort) {
     ...Client
   }
 }
@@ -702,6 +703,7 @@ export const ClientsDocument = gql`
  *   variables: {
  *      type: // value for 'type'
  *      city: // value for 'city'
+ *      sort: // value for 'sort'
  *   },
  * });
  */
