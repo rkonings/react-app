@@ -99,6 +99,7 @@ export type Mutation = {
    __typename?: 'Mutation',
   addClient?: Maybe<Client>,
   updateClient?: Maybe<Client>,
+  deleteClient: Client,
   addActivity?: Maybe<Activity>,
   updateActivity?: Maybe<Activity>,
   signup?: Maybe<User>,
@@ -115,6 +116,11 @@ export type MutationAddClientArgs = {
 
 export type MutationUpdateClientArgs = {
   client?: Maybe<ClientInput>
+};
+
+
+export type MutationDeleteClientArgs = {
+  _id: Scalars['String']
 };
 
 
@@ -178,6 +184,7 @@ export type QueryClientArgs = {
 
 
 export type QueryClientsArgs = {
+  sort?: Maybe<SortInput>,
   type?: Maybe<Array<Maybe<Scalars['String']>>>,
   city?: Maybe<Array<Maybe<Scalars['String']>>>
 };
@@ -204,6 +211,16 @@ export type Settings = {
   pushNotifications: Scalars['Boolean'],
   unscribeEmailLink: Scalars['Boolean'],
   signature: Scalars['String'],
+};
+
+export enum SortDirectionInput {
+  Asc = 'asc',
+  Desc = 'desc'
+}
+
+export type SortInput = {
+  field: Scalars['String'],
+  direction: SortDirectionInput,
 };
 
 export type Token = {
@@ -291,6 +308,19 @@ export type CreateClientMutation = (
   )> }
 );
 
+export type DeleteClientMutationVariables = {
+  _id: Scalars['String']
+};
+
+
+export type DeleteClientMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteClient: (
+    { __typename?: 'Client' }
+    & ClientFragment
+  ) }
+);
+
 export type UpdateClientMutationVariables = {
   client?: Maybe<ClientInput>
 };
@@ -323,7 +353,8 @@ export type ClientQuery = (
 
 export type ClientsQueryVariables = {
   type?: Maybe<Array<Maybe<Scalars['String']>>>,
-  city?: Maybe<Array<Maybe<Scalars['String']>>>
+  city?: Maybe<Array<Maybe<Scalars['String']>>>,
+  sort?: Maybe<SortInput>
 };
 
 
@@ -549,6 +580,38 @@ export function useCreateClientMutation(baseOptions?: ApolloReactHooks.MutationH
 export type CreateClientMutationHookResult = ReturnType<typeof useCreateClientMutation>;
 export type CreateClientMutationResult = ApolloReactCommon.MutationResult<CreateClientMutation>;
 export type CreateClientMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateClientMutation, CreateClientMutationVariables>;
+export const DeleteClientDocument = gql`
+    mutation DeleteClient($_id: String!) {
+  deleteClient(_id: $_id) {
+    ...Client
+  }
+}
+    ${ClientFragmentDoc}`;
+export type DeleteClientMutationFn = ApolloReactCommon.MutationFunction<DeleteClientMutation, DeleteClientMutationVariables>;
+
+/**
+ * __useDeleteClientMutation__
+ *
+ * To run a mutation, you first call `useDeleteClientMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteClientMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteClientMutation, { data, loading, error }] = useDeleteClientMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function useDeleteClientMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteClientMutation, DeleteClientMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteClientMutation, DeleteClientMutationVariables>(DeleteClientDocument, baseOptions);
+      }
+export type DeleteClientMutationHookResult = ReturnType<typeof useDeleteClientMutation>;
+export type DeleteClientMutationResult = ApolloReactCommon.MutationResult<DeleteClientMutation>;
+export type DeleteClientMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteClientMutation, DeleteClientMutationVariables>;
 export const UpdateClientDocument = gql`
     mutation updateClient($client: ClientInput) {
   updateClient(client: $client) {
@@ -619,8 +682,8 @@ export type ClientQueryHookResult = ReturnType<typeof useClientQuery>;
 export type ClientLazyQueryHookResult = ReturnType<typeof useClientLazyQuery>;
 export type ClientQueryResult = ApolloReactCommon.QueryResult<ClientQuery, ClientQueryVariables>;
 export const ClientsDocument = gql`
-    query clients($type: [String], $city: [String]) {
-  clients(type: $type, city: $city) {
+    query clients($type: [String], $city: [String], $sort: SortInput) {
+  clients(type: $type, city: $city, sort: $sort) {
     ...Client
   }
 }
@@ -640,6 +703,7 @@ export const ClientsDocument = gql`
  *   variables: {
  *      type: // value for 'type'
  *      city: // value for 'city'
+ *      sort: // value for 'sort'
  *   },
  * });
  */
