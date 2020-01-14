@@ -8,8 +8,13 @@ import { DataField, DataRow } from 'react-ui/build/interfaces/Data';
 import { Edit, Options, Trash } from 'react-ui/build/Icon';
 import RowAction from 'react-ui/build/DataTable/DataTableRowAction';
 import ButtonGroup from 'react-ui/build/ButtonGroup/ButtonGroup';
+import DeletePopover from 'react-ui/build/Popover/DeletePopover';
 
-import { useClientsQuery } from '../../modules/hooks';
+import {
+    useClientsQuery,
+    useDeleteClientMutation,
+    ClientsDocument,
+} from '../../modules/hooks';
 
 import {
     ClientFilter,
@@ -65,6 +70,16 @@ const fields: DataField[] = [
 export default () => {
     const [editClientId, setEditClientId] = React.useState<string | null>(null);
     const history = useHistory();
+    const [deleteClient] = useDeleteClientMutation();
+
+    const filter = useQueryFilter();
+
+    const deleteClientHandler = (_id: string) => {
+        deleteClient({
+            variables: { _id },
+            refetchQueries: [{ query: ClientsDocument, variables: { filter } }],
+        });
+    };
 
     const columns = [
         {
@@ -81,9 +96,18 @@ export default () => {
                     >
                         <Edit />
                     </RowAction>
-                    <RowAction onClick={() => console.log('Delete', row)}>
-                        <Trash />
-                    </RowAction>
+                    <DeletePopover
+                        link={
+                            <RowAction>
+                                <Trash />
+                            </RowAction>
+                        }
+                        onDelete={() => deleteClientHandler(row.data._id)}
+                    >
+                        Your are about to premantly remove this client. This
+                        cannot be undone.
+                    </DeletePopover>
+
                     <RowAction>
                         <Options />
                     </RowAction>
@@ -134,7 +158,7 @@ export default () => {
             sortable: true,
         },
     ];
-    const filter = useQueryFilter();
+
     const { loading, data } = useClientsQuery({ variables: filter });
 
     const clients: DataRow[] = [];
