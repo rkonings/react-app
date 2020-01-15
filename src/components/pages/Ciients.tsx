@@ -212,22 +212,27 @@ export default () => {
         setSort(transformedSort);
     };
 
+    const Toolbar = () => (
+        <React.Fragment>
+            <ClientFilter />
+            <AddClient />
+        </React.Fragment>
+    );
+
     return (
         <React.Fragment>
-            <Basic pageTitle="Clients management" left={<Navigation />}>
-                <React.Fragment>
-                    <React.Fragment>
-                        <AddClient />
-                        <ClientFilter />
-                        <ResponsiveDataTable
-                            columns={columns}
-                            data={clients}
-                            fields={fields}
-                            loading={!data && loading}
-                            sortHandler={sortHandler}
-                        />
-                    </React.Fragment>
-                </React.Fragment>
+            <Basic
+                pageTitle="Clients management"
+                left={<Navigation />}
+                toolbar={<Toolbar />}
+            >
+                <ResponsiveDataTable
+                    columns={columns}
+                    data={clients}
+                    fields={fields}
+                    loading={!data && loading}
+                    sortHandler={sortHandler}
+                />
             </Basic>
             {editClientId && (
                 <UpdateClient
