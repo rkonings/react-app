@@ -72,6 +72,10 @@ const fields: DataField[] = [
 export default () => {
     const [editClientId, setEditClientId] = React.useState<string | null>(null);
     const history = useHistory();
+    const [sort, setSort] = React.useState<SortInput>({
+        field: 'name',
+        direction: SortDirectionInput.Asc,
+    });
     const [deleteClient] = useDeleteClientMutation();
 
     const filter = useQueryFilter();
@@ -182,6 +186,10 @@ export default () => {
     ];
 
     const { loading, data, refetch } = useClientsQuery({ variables: filter });
+    const { loading, data } = useClientsQuery({
+        variables: { ...filter, sort },
+        fetchPolicy: 'network-only',
+    });
 
     const clients: DataRow[] = [];
 
@@ -202,6 +210,7 @@ export default () => {
                     : SortDirectionInput.Desc,
         };
         refetch({ ...filter, sort: transformedSort });
+        setSort(transformedSort);
     };
 
     return (
