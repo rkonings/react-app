@@ -6,7 +6,6 @@ import { Sort } from 'react-ui/build/DataTable/DataTable';
 import { AddClient } from '../../modules/client/components/addClient';
 import { UpdateClient } from '../../modules/client/components/updateClient';
 import { DataField, DataRow } from 'react-ui/build/interfaces/Data';
-import { Edit, Options, Trash } from 'react-ui/build/Icon';
 import { Edit, Options, Trash, Clients } from 'react-ui/build/Icon';
 import RowAction from 'react-ui/build/DataTable/DataTableRowAction';
 import ButtonGroup from 'react-ui/build/ButtonGroup/ButtonGroup';
@@ -226,7 +225,6 @@ export default () => {
                             columns={columns}
                             data={clients}
                             fields={fields}
-                            loading={loading}
                             loading={!data && loading}
                             sortHandler={sortHandler}
                         />
