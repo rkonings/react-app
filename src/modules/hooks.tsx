@@ -184,7 +184,6 @@ export type QueryClientArgs = {
 
 
 export type QueryClientsArgs = {
-  sort?: Maybe<SortInput>,
   type?: Maybe<Array<Maybe<Scalars['String']>>>,
   city?: Maybe<Array<Maybe<Scalars['String']>>>,
   sort?: Maybe<SortInput>
