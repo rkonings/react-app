@@ -31,10 +31,16 @@ export default () => {
     const activities: Activities =
         (data && data.client && data.client.activities) || [];
     return (
-        <Detail pageTitle={pageTitle} left={<Navigation />} details={detail}>
-            {(data && data.client && (
-                <AddActivity clientId={data.client._id} />
-            )) || <div />}
+        <Detail
+            pageTitle={pageTitle}
+            left={<Navigation />}
+            details={detail}
+            toolbar={
+                (data && data.client && (
+                    <AddActivity clientId={data.client._id} />
+                )) || <div />
+            }
+        >
             {(data && data.client && (
                 <Tab type="minimal" active={activeTabId}>
                     <TabContent id="all" label="Activities">
