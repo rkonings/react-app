@@ -209,7 +209,6 @@ export default () => {
                     ? SortDirectionInput.Asc
                     : SortDirectionInput.Desc,
         };
-        refetch({ ...filter, sort: transformedSort });
         setSort(transformedSort);
     };
 
