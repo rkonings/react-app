@@ -79,7 +79,27 @@ export default () => {
     const deleteClientHandler = (_id: string) => {
         deleteClient({
             variables: { _id },
-            refetchQueries: [{ query: ClientsDocument, variables: { filter } }],
+            refetchQueries: [
+                { query: ClientsDocument, variables: { ...filter, sort } },
+            ],
+            // update: (cache, { data }) => {
+            //     const result = cache.readQuery<{ clients: Array<Client> }>({
+            //         query: ClientsDocument,
+            //         variables: { ...filter, sort },
+            //     });
+
+            //     if (result && data && data.deleteClient._id) {
+            //         const clients = result.clients.filter(
+            //             client => client._id !== data.deleteClient._id
+            //         );
+
+            //         cache.writeQuery({
+            //             query: ClientsDocument,
+            //             variables: { ...filter, sort },
+            //             data: { clients },
+            //         });
+            //     }
+            // },
         });
     };
 
