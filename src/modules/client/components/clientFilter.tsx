@@ -48,7 +48,14 @@ export const ClientFilter = () => {
             }
         });
 
-        return <FilterPopup data={data.filter} onChange={setFilter} />;
+        return (
+            <FilterPopup
+                data={data.filter}
+                height="400px"
+                width="70%"
+                onChange={setFilter}
+            />
+        );
     }
 
     return <div />;
