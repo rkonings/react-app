@@ -146,14 +146,21 @@ export default () => {
             fieldName: 'name',
             sortable: true,
             defaultSort: true,
-            width: 500,
+            width: 350,
             defaultSortDirection: 'ASC',
         },
         {
             type: 'DATA',
             fieldName: 'type',
-            width: 400,
+            width: 150,
             align: 'left',
+            sortable: true,
+        },
+        {
+            type: 'DATA',
+            fieldName: 'telephone',
+            width: 150,
+            align: 'right',
             sortable: true,
         },
         {
@@ -175,13 +182,6 @@ export default () => {
             fieldName: 'city',
             width: 200,
             align: 'left',
-            sortable: true,
-        },
-        {
-            type: 'DATA',
-            fieldName: 'telephone',
-            width: 300,
-            align: 'right',
             sortable: true,
         },
     ];
