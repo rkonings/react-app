@@ -16,6 +16,7 @@ import {
     useDeleteClientMutation,
     ClientsDocument,
     SortDirectionInput,
+    SortInput,
 } from '../../modules/hooks';
 
 import {
@@ -72,6 +73,10 @@ const fields: DataField[] = [
 export default () => {
     const [editClientId, setEditClientId] = React.useState<string | null>(null);
     const history = useHistory();
+    const [sort, setSort] = React.useState<SortInput>({
+        field: 'name',
+        direction: SortDirectionInput.Asc,
+    });
     const [deleteClient] = useDeleteClientMutation();
 
     const filter = useQueryFilter();
@@ -79,7 +84,27 @@ export default () => {
     const deleteClientHandler = (_id: string) => {
         deleteClient({
             variables: { _id },
-            refetchQueries: [{ query: ClientsDocument, variables: { filter } }],
+            refetchQueries: [
+                { query: ClientsDocument, variables: { ...filter, sort } },
+            ],
+            // update: (cache, { data }) => {
+            //     const result = cache.readQuery<{ clients: Array<Client> }>({
+            //         query: ClientsDocument,
+            //         variables: { ...filter, sort },
+            //     });
+
+            //     if (result && data && data.deleteClient._id) {
+            //         const clients = result.clients.filter(
+            //             client => client._id !== data.deleteClient._id
+            //         );
+
+            //         cache.writeQuery({
+            //             query: ClientsDocument,
+            //             variables: { ...filter, sort },
+            //             data: { clients },
+            //         });
+            //     }
+            // },
         });
     };
 
@@ -161,7 +186,10 @@ export default () => {
         },
     ];
 
-    const { loading, data, refetch } = useClientsQuery({ variables: filter });
+    const { loading, data } = useClientsQuery({
+        variables: { ...filter, sort },
+        fetchPolicy: 'network-only',
+    });
 
     const clients: DataRow[] = [];
 
@@ -181,7 +209,7 @@ export default () => {
                     ? SortDirectionInput.Asc
                     : SortDirectionInput.Desc,
         };
-        refetch({ ...filter, sort: transformedSort });
+        setSort(transformedSort);
     };
 
     return (
@@ -195,7 +223,7 @@ export default () => {
                             columns={columns}
                             data={clients}
                             fields={fields}
-                            loading={loading}
+                            loading={!data && loading}
                             sortHandler={sortHandler}
                         />
                     </React.Fragment>
