@@ -185,7 +185,6 @@ export default () => {
         },
     ];
 
-    const { loading, data, refetch } = useClientsQuery({ variables: filter });
     const { loading, data } = useClientsQuery({
         variables: { ...filter, sort },
         fetchPolicy: 'network-only',
