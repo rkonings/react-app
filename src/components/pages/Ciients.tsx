@@ -227,6 +227,7 @@ export default () => {
                             data={clients}
                             fields={fields}
                             loading={loading}
+                            loading={!data && loading}
                             sortHandler={sortHandler}
                         />
                     </React.Fragment>
