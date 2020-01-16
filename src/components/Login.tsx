@@ -1,32 +1,13 @@
 import React from 'react';
-import Login, { LoginValues } from 'react-ui/build/UI/Login';
-import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
-import { useHistory } from 'react-router-dom';
-
-const LOGIN_QUERY = gql`
-    mutation LOGIN($email: String!, $password: String!){
-        login(email: $email, password: $password){
-            token
-        }
-    }
-`;
+import Login from 'react-ui/build/UI/Login';
+import { useAuth, AuthCredentials } from '../modules/auth';
 
 export default () => {
-	const [login, { data }] = useMutation(LOGIN_QUERY);
-	const history = useHistory();
+    const { login } = useAuth();
 
-	if (data) {
-		localStorage.setItem('token', data.login.token);
-		history.push('/');
-	}
+    const onLogin = ({ email, password }: AuthCredentials) => {
+        login({ email, password });
+    };
 
-	const onLogin = ({email, password}: LoginValues) => {
-		console.log(email, password);
-		login({variables: {email, password}});
-	};
-
-	return (
-		<Login onLogin={onLogin} />
-	);
+    return <Login onLogin={onLogin} />;
 };
