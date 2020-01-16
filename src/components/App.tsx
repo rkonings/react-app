@@ -15,16 +15,16 @@ const App = () => {
         <ApolloProvider client={ApolloClient}>
             <AuthProvider>
                 <ThemeProvider theme={defaultTheme}>
-                    <Authenticated login={<Login />}>
-                        <DataLoader>
-                            <PortalProvider>
-                                <React.Fragment>
-                                    <GlobalStyle />
+                    <React.Fragment>
+                        <GlobalStyle />
+                        <Authenticated login={<Login />}>
+                            <DataLoader>
+                                <PortalProvider>
                                     <Router />
-                                </React.Fragment>
-                            </PortalProvider>
-                        </DataLoader>
-                    </Authenticated>
+                                </PortalProvider>
+                            </DataLoader>
+                        </Authenticated>
+                    </React.Fragment>
                 </ThemeProvider>
             </AuthProvider>
         </ApolloProvider>
