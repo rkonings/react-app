@@ -1,7 +1,6 @@
 import React from 'react';
-import { Route, BrowserRouter as Router, Link, Switch } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import Clients from './pages/Ciients';
-import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 import Inbox from './pages/Inbox';
@@ -42,15 +41,6 @@ const SecureRoutes = (
     </Switch>
 );
 
-const Routes = (
-    <Switch>
-        <Route key="login" path="/login" exact={true} component={Login} />
-        <Route component={NotFound} />
-    </Switch>
-);
-
 export default () => {
-    return (
-        <Router>{localStorage.getItem('token') ? SecureRoutes : Routes}</Router>
-    );
+    return <Router>{SecureRoutes}</Router>;
 };
