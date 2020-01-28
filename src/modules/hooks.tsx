@@ -106,6 +106,7 @@ export type Mutation = {
   login?: Maybe<Token>,
   updateUser?: Maybe<User>,
   seedClients?: Maybe<Array<Maybe<Client>>>,
+  time: Time,
 };
 
 
@@ -157,6 +158,11 @@ export type MutationSeedClientsArgs = {
   amount: Scalars['Int']
 };
 
+
+export type MutationTimeArgs = {
+  time: TimeInput
+};
+
 export type Post = {
    __typename?: 'Post',
   id: Scalars['String'],
@@ -175,6 +181,7 @@ export type Query = {
   activity: Activity,
   activities?: Maybe<Array<Maybe<Activity>>>,
   filter: Array<Filter>,
+  time: Array<Time>,
 };
 
 
@@ -204,6 +211,11 @@ export type QueryFilterArgs = {
   types: Array<Scalars['String']>
 };
 
+
+export type QueryTimeArgs = {
+  client: Scalars['String']
+};
+
 export type Settings = {
    __typename?: 'Settings',
   language: Scalars['String'],
@@ -221,6 +233,24 @@ export enum SortDirectionInput {
 export type SortInput = {
   field: Scalars['String'],
   direction: SortDirectionInput,
+};
+
+export type Time = {
+   __typename?: 'Time',
+  _id: Scalars['String'],
+  client: Scalars['String'],
+  task: Scalars['String'],
+  start: Scalars['Date'],
+  end: Scalars['Date'],
+  duration: Scalars['Int'],
+};
+
+export type TimeInput = {
+  task: Scalars['String'],
+  client: Scalars['String'],
+  start: Scalars['Date'],
+  end: Scalars['Date'],
+  duration: Scalars['Int'],
 };
 
 export type Token = {
@@ -383,6 +413,37 @@ export type FiltersQuery = (
   )> }
 );
 
+export type TimeFragment = (
+  { __typename?: 'Time' }
+  & Pick<Time, '_id' | 'task' | 'start' | 'end' | 'duration'>
+);
+
+export type CreateTimeMutationVariables = {
+  time: TimeInput
+};
+
+
+export type CreateTimeMutation = (
+  { __typename?: 'Mutation' }
+  & { time: (
+    { __typename?: 'Time' }
+    & TimeFragment
+  ) }
+);
+
+export type TimeQueryVariables = {
+  client: Scalars['String']
+};
+
+
+export type TimeQuery = (
+  { __typename?: 'Query' }
+  & { time: Array<(
+    { __typename?: 'Time' }
+    & TimeFragment
+  )> }
+);
+
 export type UserFragment = (
   { __typename?: 'User' }
   & Pick<User, '_id' | 'email' | 'firstName' | 'lastName'>
@@ -435,6 +496,15 @@ export const ClientFragmentDoc = gql`
   city
   zipcode
   type
+}
+    `;
+export const TimeFragmentDoc = gql`
+    fragment Time on Time {
+  _id
+  task
+  start
+  end
+  duration
 }
     `;
 export const UserFragmentDoc = gql`
@@ -754,6 +824,71 @@ export function useFiltersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHook
 export type FiltersQueryHookResult = ReturnType<typeof useFiltersQuery>;
 export type FiltersLazyQueryHookResult = ReturnType<typeof useFiltersLazyQuery>;
 export type FiltersQueryResult = ApolloReactCommon.QueryResult<FiltersQuery, FiltersQueryVariables>;
+export const CreateTimeDocument = gql`
+    mutation createTime($time: TimeInput!) {
+  time(time: $time) {
+    ...Time
+  }
+}
+    ${TimeFragmentDoc}`;
+export type CreateTimeMutationFn = ApolloReactCommon.MutationFunction<CreateTimeMutation, CreateTimeMutationVariables>;
+
+/**
+ * __useCreateTimeMutation__
+ *
+ * To run a mutation, you first call `useCreateTimeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTimeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTimeMutation, { data, loading, error }] = useCreateTimeMutation({
+ *   variables: {
+ *      time: // value for 'time'
+ *   },
+ * });
+ */
+export function useCreateTimeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateTimeMutation, CreateTimeMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateTimeMutation, CreateTimeMutationVariables>(CreateTimeDocument, baseOptions);
+      }
+export type CreateTimeMutationHookResult = ReturnType<typeof useCreateTimeMutation>;
+export type CreateTimeMutationResult = ApolloReactCommon.MutationResult<CreateTimeMutation>;
+export type CreateTimeMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateTimeMutation, CreateTimeMutationVariables>;
+export const TimeDocument = gql`
+    query Time($client: String!) {
+  time(client: $client) {
+    ...Time
+  }
+}
+    ${TimeFragmentDoc}`;
+
+/**
+ * __useTimeQuery__
+ *
+ * To run a query within a React component, call `useTimeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTimeQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTimeQuery({
+ *   variables: {
+ *      client: // value for 'client'
+ *   },
+ * });
+ */
+export function useTimeQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<TimeQuery, TimeQueryVariables>) {
+        return ApolloReactHooks.useQuery<TimeQuery, TimeQueryVariables>(TimeDocument, baseOptions);
+      }
+export function useTimeLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<TimeQuery, TimeQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<TimeQuery, TimeQueryVariables>(TimeDocument, baseOptions);
+        }
+export type TimeQueryHookResult = ReturnType<typeof useTimeQuery>;
+export type TimeLazyQueryHookResult = ReturnType<typeof useTimeLazyQuery>;
+export type TimeQueryResult = ApolloReactCommon.QueryResult<TimeQuery, TimeQueryVariables>;
 export const UpdateUserDocument = gql`
     mutation updateUser($user: InputUser) {
   updateUser(user: $user) {
